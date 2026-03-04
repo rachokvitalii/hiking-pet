@@ -28,11 +28,14 @@ const Profile: FC = () => {
 
   useEffect(() => {
     if (me.data) {
+      const parsedExp = profileSchema.shape.experienceLevel.safeParse(me.data.experienceLevel)
+      const parsedHike = profileSchema.shape.preferredHikeType.safeParse(me.data.preferredHikeType)
+
       form.reset({
         displayName: me.data.displayName ?? null,
         homeRegion: me.data.homeRegion ?? null,
-        experienceLevel: me.data.experienceLevel ?? null,
-        preferredHikeType: me.data.preferredHikeType ?? null,
+        experienceLevel: parsedExp.success ? parsedExp.data : null,
+        preferredHikeType: parsedHike.success ? parsedHike.data : null,
         maxDailyKm: me.data.maxDailyKm ?? null,
       })
     }
