@@ -37,7 +37,7 @@ export const packingCategory = pgTable(
     uniqueIndex("packing_category_type_key_unique").on(t.type, t.key),
   ]
 );
-
+// belong to category
 export const packingCatalogItem = pgTable(
   "packing_catalog_item",
   {
@@ -66,6 +66,7 @@ export const packingCatalogItem = pgTable(
   ],
 );
 
+// belong to list
 export const packingListItem = pgTable(
   "packing_list_item",
   {

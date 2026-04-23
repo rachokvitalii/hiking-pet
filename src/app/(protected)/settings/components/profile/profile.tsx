@@ -9,7 +9,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
 import { api } from "~/trpc/react";
-import { HIKE_TYPE_LABEL } from "~/types/types";
+import { EXPERIENCE_LEVEL_LABEL, EXPERIENCE_LEVELS, HIKE_TYPE_LABEL, HIKE_TYPES } from "~/types/types";
 
 const Profile: FC = () => {
   const form = useForm<ProfileSchema>({
@@ -87,9 +87,9 @@ const Profile: FC = () => {
                 aria-invalid={fieldState.invalid}
               >
                 <option value="">Select experience level</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
+                {EXPERIENCE_LEVELS.map((level) => (
+                  <option key={level} value={level}>{EXPERIENCE_LEVEL_LABEL[level]}</option>
+                ))}
               </select>
             </FieldContent>
             {fieldState.invalid && <FieldError >{fieldState.error?.message}</FieldError>}
@@ -108,8 +108,8 @@ const Profile: FC = () => {
               >
                 <option value="">Select hike type</option>
 
-                {Object.entries(HIKE_TYPE_LABEL).map(([value, label]) => (
-                  <option key={value} value={value}>{label}</option>
+                {HIKE_TYPES.map((value) => (
+                  <option key={value} value={value}>{HIKE_TYPE_LABEL[value]}</option>
                 ))}
               </select>
             </FieldContent>
