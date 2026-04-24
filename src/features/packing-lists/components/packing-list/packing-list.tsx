@@ -4,8 +4,8 @@ import { api } from "~/trpc/react"
 import { CreateList } from "../create-list"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Badge } from "~/components/ui/badge"
-import { Button } from "~/components/ui/button"
 import { DeleteList } from "../delete-list"
+import { EditList } from "../edit-list"
 import { Skeleton } from "~/components/ui/skeleton"
 
 export const PackingList = () => {
@@ -57,9 +57,7 @@ export const PackingList = () => {
                 </div>
     
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" disabled>
-                    Open
-                  </Button>
+                  <EditList list={item} />
                   <DeleteList id={item.id} />
                 </div>
               </CardContent>

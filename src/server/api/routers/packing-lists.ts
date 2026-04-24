@@ -26,5 +26,17 @@ export const packingListsRouter = createTRPCRouter({
     const userId = Number(ctx.userId)
 
     await ctx.db.delete(packingList).where(and(eq(packingList.id, input.id), eq(packingList.userId, userId)))
-  })
+  }),
+  update: protectedProcedure.input(packingListSchema.extend({ id: z.number() })).mutation(async ({ ctx, input }) => {
+    const userId = Number(ctx.userId)
+    const { id, ...data } = input
+
+    const [updated] = await ctx.db
+      .update(packingList)
+      .set({ ...data, updatedAt: new Date() })
+      .where(and(eq(packingList.id, id), eq(packingList.userId, userId)))
+      .returning()
+
+    return updated
+  }),
 });
