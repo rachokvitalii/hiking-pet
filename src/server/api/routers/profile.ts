@@ -1,8 +1,11 @@
-import { db } from "~/server/db";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { userProfile } from "~/server/db/schema";
+import { compare, hash } from "bcrypt";
 import { eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
+import { changePasswordSchema } from "~/app/(protected)/settings/components/change-password/validation";
 import { profileSchema } from "~/app/(protected)/settings/components/profile/validation";
+import { db } from "~/server/db";
+import { userProfile, users } from "~/server/db/schema";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const profileRouter = createTRPCRouter({
   me: protectedProcedure.query(async ({ ctx }) => {
@@ -40,5 +43,25 @@ export const profileRouter = createTRPCRouter({
         .returning()
 
       return inserted[0]
-    })
+    }),
+
+  changePassword: protectedProcedure
+    .input(changePasswordSchema)
+    .mutation(async ({ ctx, input }) => {
+      const [user] = await db.select().from(users).where(eq(users.id, Number(ctx.userId)))
+
+      if (!user) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
+      }
+
+      const passwordMatch = await compare(input.currentPassword, user.password!)
+
+      if (!passwordMatch) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Current password is incorrect" })
+      }
+
+      const hashedPassword = await hash(input.password, 10)
+
+      await db.update(users).set({ password: hashedPassword }).where(eq(users.id, Number(ctx.userId)))
+    }),
 })

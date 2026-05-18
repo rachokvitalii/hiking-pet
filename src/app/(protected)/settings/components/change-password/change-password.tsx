@@ -5,10 +5,9 @@ import { Input } from "~/components/ui/input"
 import { Controller, useForm } from "react-hook-form"
 import { type ChangePasswordInput, changePasswordSchema } from "./validation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { changePasswordAction } from "./actions"
 import { Button } from "~/components/ui/button"
-import { formErrorsSetter } from "~/lib/form-errors"
 import { toast } from "sonner"
+import { api } from "~/trpc/react"
 
 const ChangePassword = () => {
   const form = useForm<ChangePasswordInput>({
@@ -20,17 +19,22 @@ const ChangePassword = () => {
     }
   })
 
-  const onSubmit = async (data: ChangePasswordInput) => {
-    form.clearErrors('root')
-
-    const res = await changePasswordAction(data)
-
-    if (!res?.ok) {
-      formErrorsSetter(res.issues, form.setError)
-    } else {
+  const changePassword = api.profile.changePassword.useMutation({
+    onSuccess: () => {
       form.reset()
       toast.success("Password has been successfully changed")
-    }
+    },
+    onError: (error) => {
+      if (error.data?.code === "BAD_REQUEST") {
+        form.setError("currentPassword", { message: error.message })
+      } else {
+        form.setError("root", { message: error.message })
+      }
+    },
+  })
+
+  const onSubmit = async (data: ChangePasswordInput) => {
+    await changePassword.mutateAsync(data)
   }
 
   return (
@@ -42,7 +46,7 @@ const ChangePassword = () => {
             <FieldContent>
               <Input type="password" {...field} />
             </FieldContent>
-            {fieldState.invalid && <FieldError >{fieldState.error?.message}</FieldError>}
+            {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
           </Field>
         )} />
         <Controller control={form.control} name="password" render={({ field, fieldState }) => (
@@ -51,7 +55,7 @@ const ChangePassword = () => {
             <FieldContent>
               <Input type="password" {...field} />
             </FieldContent>
-            {fieldState.invalid && <FieldError >{fieldState.error?.message}</FieldError>}
+            {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
           </Field>
         )} />
         <Controller control={form.control} name="passwordConfirm" render={({ field, fieldState }) => (
@@ -60,11 +64,11 @@ const ChangePassword = () => {
             <FieldContent>
               <Input type="password" {...field} />
             </FieldContent>
-            {fieldState.invalid && <FieldError >{fieldState.error?.message}</FieldError>}
+            {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
           </Field>
         )} />
         {form.formState.errors.root?.message && (
-          <FieldError>{form.formState.errors.root?.message}</FieldError>
+          <FieldError>{form.formState.errors.root.message}</FieldError>
         )}
         <Field orientation="horizontal">
           <Button type="submit" className="cursor-pointer">
