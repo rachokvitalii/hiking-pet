@@ -89,10 +89,10 @@ export const CreateList = () => {
                         onValueChange={field.onChange}
                         className="flex gap-6"
                       >
-                        {Object.values(PackingListType).map((value) => (
+                        {Object.entries(PackingListType).map(([key, value]) => (
                           <label key={value} className="flex items-center gap-2 cursor-pointer">
                             <RadioGroupItem value={value} />
-                            <span className="capitalize">{value}</span>
+                            <span>{key}</span>
                           </label>
                         ))}
                       </RadioGroup>

@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { packingList } from "~/server/db/packing-schema";
+import { packingLists } from "~/server/db/packing-schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { packingListSchema } from "~/features/packing-lists/schemas/packing-list-schema";
 import z from "zod";
@@ -8,33 +8,33 @@ export const packingListsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const userId = Number(ctx.userId)
 
-    const packingLists = await ctx.db.select().from(packingList).where(eq(packingList.userId, userId))
+    const lists = await ctx.db.select().from(packingLists).where(eq(packingLists.userId, userId))
 
-    return packingLists ?? []
+    return lists ?? []
   }),
   create: protectedProcedure.input(packingListSchema).mutation(async ({ ctx, input }) => {
     const userId = Number(ctx.userId)
 
-    const [newPackingList] = await ctx.db.insert(packingList).values({
+    const [newList] = await ctx.db.insert(packingLists).values({
       ...input,
       userId,
     }).returning()
 
-    return newPackingList
+    return newList
   }),
   delete: protectedProcedure.input(z.object({ id: z.number() })).mutation(async ({ ctx, input }) => {
     const userId = Number(ctx.userId)
 
-    await ctx.db.delete(packingList).where(and(eq(packingList.id, input.id), eq(packingList.userId, userId)))
+    await ctx.db.delete(packingLists).where(and(eq(packingLists.id, input.id), eq(packingLists.userId, userId)))
   }),
   update: protectedProcedure.input(packingListSchema.extend({ id: z.number() })).mutation(async ({ ctx, input }) => {
     const userId = Number(ctx.userId)
     const { id, ...data } = input
 
     const [updated] = await ctx.db
-      .update(packingList)
+      .update(packingLists)
       .set({ ...data, updatedAt: new Date() })
-      .where(and(eq(packingList.id, id), eq(packingList.userId, userId)))
+      .where(and(eq(packingLists.id, id), eq(packingLists.userId, userId)))
       .returning()
 
     return updated

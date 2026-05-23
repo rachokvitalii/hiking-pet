@@ -1,140 +1,105 @@
-import { relations } from "drizzle-orm";
-import { users } from "./users-schema";
-import { boolean, index, integer, pgTable, serial, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+  index,
+} from 'drizzle-orm/pg-core'
+import { users } from './users-schema'
 
-export const packingList = pgTable(
-  "packing_list",
-  {
-    id: serial("id").primaryKey(),
-    userId: integer("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    title: varchar("title", { length: 128 }).notNull(),
-    type: varchar("type", { length: 32 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-  },
-  (t) => [index("packing_list_user_idx").on(t.userId)]
-);
+export const packingListTypeEnum = pgEnum('packing_list_type', [
+  'hiking',
+  'camping',
+  'bike_ride',
+])
 
-export const packingCategory = pgTable(
-  "packing_category",
+export const packingLists = pgTable(
+  'packing_lists',
   {
-    id: serial("id").primaryKey(),
-    type: varchar("type", { length: 32 }).notNull(), // "hiking" | "camping" | ...
-    key: varchar("key", { length: 64 }).notNull(), // "sleep", "cooking" ...
-    title: varchar("title", { length: 128 }).notNull(), // "Sleep", "Cooking"
-    sortOrder: integer("sort_order").notNull().default(0),
-    createdAt: timestamp("created_at", { withTimezone: true })
+    id: serial('id').primaryKey(),
+
+    userId: integer('user_id')
       .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+      .references(() => users.id, { onDelete: 'cascade' }),
+
+    title: varchar('title', { length: 128 }).notNull(),
+
+    type: packingListTypeEnum('type').notNull(),
+
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },
-  (t) => [
-    index("packing_category_type_idx").on(t.type),
-    uniqueIndex("packing_category_type_key_unique").on(t.type, t.key),
+  (table) => [
+    index('packing_lists_user_id_idx').on(table.userId),
   ]
-);
-// belong to category
-export const packingCatalogItem = pgTable(
-  "packing_catalog_item",
+)
+
+export const gearCategories = pgTable('gear_categories', {
+  id: serial('id').primaryKey(),
+
+  name: varchar('name', { length: 128 }).notNull(),
+
+  slug: varchar('slug', { length: 128 }).notNull().unique(),
+
+  sortOrder: integer('sort_order').notNull(),
+})
+
+export const gearCatalogItems = pgTable(
+  'gear_catalog_items',
   {
-    id: serial("id").primaryKey(),
-    categoryId: integer("category_id")
-      .notNull()
-      .references(() => packingCategory.id, { onDelete: "cascade" }),
+    id: serial('id').primaryKey(),
 
-    key: varchar("key", { length: 96 }), // optional stable key, e.g. "sleeping_bag"
-    label: varchar("label", { length: 256 }).notNull(), // "Sleeping bag"
-    sortOrder: integer("sort_order").notNull().default(0),
+    categoryId: integer('category_id')
+      .notNull()
+      .references(() => gearCategories.id, { onDelete: 'cascade' }),
 
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    name: varchar('name', { length: 128 }).notNull(),
+
+    sortOrder: integer('sort_order').notNull(),
+
+    isDefault: boolean('is_default').default(true).notNull(),
   },
-  (t) => [
-    index("packing_catalog_item_category_idx").on(t.categoryId),
-    uniqueIndex("packing_catalog_item_category_key_unique").on(
-      t.categoryId,
-      t.key,
-    ),
-  ],
-);
+  (table) => [
+    index('gear_catalog_items_category_id_idx').on(table.categoryId),
+  ]
+)
 
-// belong to list
-export const packingListItem = pgTable(
-  "packing_list_item",
+export const packingListItems = pgTable(
+  'packing_list_items',
   {
-    id: serial("id").primaryKey(),
-    listId: integer("list_id")
-      .notNull()
-      .references(() => packingList.id, { onDelete: "cascade" }),
+    id: serial('id').primaryKey(),
 
-    // якщо item з каталогу — зберігаємо catalogItemId
-    // якщо custom — тоді catalogItemId = null і заповнюємо label/categoryKey
-    catalogItemId: integer("catalog_item_id").references(() => packingCatalogItem.id, {
-      onDelete: "set null",
+    packingListId: integer('packing_list_id')
+      .notNull()
+      .references(() => packingLists.id, { onDelete: 'cascade' }),
+
+    categoryId: integer('category_id')
+      .notNull()
+      .references(() => gearCategories.id, { onDelete: 'restrict' }),
+
+    catalogItemId: integer('catalog_item_id').references(() => gearCatalogItems.id, {
+      onDelete: 'set null',
     }),
 
-    categoryKey: varchar("category_key", { length: 64 }), // "sleep", "cooking" (для custom або денормалізація)
-    label: varchar("label", { length: 256 }).notNull(), // завжди зручно мати label прямо тут
+    name: varchar('name', { length: 128 }).notNull(),
 
-    checked: boolean("checked").notNull().default(false),
-    source: varchar("source", { length: 16 }).notNull(), // "catalog" | "custom"
+    isChecked: boolean('is_checked').default(false).notNull(),
 
-    sortOrder: integer("sort_order").notNull().default(0),
+    quantity: integer('quantity').default(1).notNull(),
 
-    // optional поля (можеш видалити, якщо не треба)
-    notes: text("notes"),
-    quantity: integer("quantity"),
-    weightGrams: integer("weight_grams"),
+    note: text('note'),
 
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    sortOrder: integer('sort_order').notNull(),
+
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },
-  (t) => [
-      index("packing_list_item_list_idx").on(t.listId),
-      uniqueIndex("packing_list_item_list_catalog_unique").on(t.listId, t.catalogItemId),
-    ]
-);
-
-// relations
-export const packingListRelations = relations(packingList, ({ one, many }) => ({
-  user: one(users, {
-    fields: [packingList.userId],
-    references: [users.id],
-  }),
-  items: many(packingListItem),
-}));
-
-export const packingListItemRelations = relations(packingListItem, ({ one }) => ({
-  list: one(packingList, {
-    fields: [packingListItem.listId],
-    references: [packingList.id],
-  }),
-  catalogItem: one(packingCatalogItem, {
-    fields: [packingListItem.catalogItemId],
-    references: [packingCatalogItem.id],
-  }),
-}));
-
-export const packingCategoryRelations = relations(packingCategory, ({ many }) => ({
-  catalogItems: many(packingCatalogItem),
-}));
-
-export const packingCatalogItemRelations = relations(packingCatalogItem, ({ one, many }) => ({
-  category: one(packingCategory, {
-    fields: [packingCatalogItem.categoryId],
-    references: [packingCategory.id],
-  }),
-  listItems: many(packingListItem),
-}));
+  (table) => [
+    index('packing_list_items_list_id_idx').on(table.packingListId),
+    index('packing_list_items_category_id_idx').on(table.categoryId),
+  ]
+)

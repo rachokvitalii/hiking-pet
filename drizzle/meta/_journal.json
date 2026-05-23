@@ -15,6 +15,13 @@
       "when": 1772564294668,
       "tag": "0001_light_gauntlet",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779137055900,
+      "tag": "0002_marvelous_machine_man",
+      "breakpoints": true
     }
   ]
 }
