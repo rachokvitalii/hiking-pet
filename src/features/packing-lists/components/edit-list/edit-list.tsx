@@ -65,7 +65,7 @@ export const EditList = ({ list }: EditListProps) => {
   return (
     <>
       <Button size="sm" variant="outline" className="cursor-pointer" onClick={() => setOpen(true)}>
-        Open
+        Edit
       </Button>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>

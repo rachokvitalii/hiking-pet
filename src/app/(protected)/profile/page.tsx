@@ -97,7 +97,7 @@ const Profile: FC = async () => {
         <div className="grid gap-3 lg:grid-cols-12">
           <Card className="lg:col-span-9">
             <CardHeader>
-              <CardTitle>Packing list</CardTitle>
+              <CardTitle>Packing lists</CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-5">
