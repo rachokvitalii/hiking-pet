@@ -1,5 +1,5 @@
-import { and, eq } from "drizzle-orm";
-import { packingLists } from "~/server/db/packing-schema";
+import { and, asc, eq } from "drizzle-orm";
+import { gearCategories, packingLists } from "~/server/db/packing-schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { packingListSchema } from "~/features/packing-lists/schemas/packing-list-schema";
 import z from "zod";
@@ -11,6 +11,16 @@ export const packingListsRouter = createTRPCRouter({
     const lists = await ctx.db.select().from(packingLists).where(eq(packingLists.userId, userId))
 
     return lists ?? []
+  }),
+  getCategories: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select({
+        id: gearCategories.id,
+        key: gearCategories.key,
+        sortOrder: gearCategories.sortOrder,
+      })
+      .from(gearCategories)
+      .orderBy(asc(gearCategories.sortOrder))
   }),
   create: protectedProcedure.input(packingListSchema).mutation(async ({ ctx, input }) => {
     const userId = Number(ctx.userId)

@@ -4,6 +4,12 @@ import { useState } from "react"
 import { toast } from "sonner"
 import type { z } from "zod"
 import { useTranslations } from "next-intl"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion"
 import { Button } from "~/components/ui/button"
 import {
   Dialog,
@@ -31,8 +37,12 @@ type EditListProps = {
 export const EditList = ({ list }: EditListProps) => {
   const [open, setOpen] = useState(false)
   const tListTypes = useTranslations("packing.listTypes")
+  const tCategories = useTranslations("packing.categories")
 
   const utils = api.useUtils()
+  const { data: categories = [], isLoading: isCategoriesLoading } = api.packingLists.getCategories.useQuery(undefined, {
+    enabled: open,
+  })
 
   const editSchema = packingListSchema.pick({ title: true })
   type EditSchema = z.infer<typeof editSchema>
@@ -99,6 +109,29 @@ export const EditList = ({ list }: EditListProps) => {
                   <span className="text-sm text-muted-foreground">
                     {tListTypes(list.type as PackingListType)}
                   </span>
+                </FieldContent>
+              </Field>
+              <Field className="flex flex-col gap-2">
+                <FieldLabel>Categories</FieldLabel>
+                <FieldContent>
+                  {isCategoriesLoading ? (
+                    <span className="text-sm text-muted-foreground">Loading...</span>
+                  ) : (
+                    <Accordion type="multiple" className="w-full">
+                      {categories.map((category) => (
+                        <AccordionItem key={category.id} value={category.key}>
+                          <AccordionTrigger>
+                            {tCategories(category.key)}
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <span className="text-sm text-muted-foreground">
+                              Gear catalog items will appear here.
+                            </span>
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  )}
                 </FieldContent>
               </Field>
             </FieldSet>
