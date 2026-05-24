@@ -1,0 +1,22 @@
+{
+  "packing": {
+    "categories": {
+      "bivouac": "Bivouac",
+      "kitchen": "Kitchen",
+      "hygiene": "Hygiene",
+      "gear": "Gear",
+      "navigation": "Navigation",
+      "electronics": "Electronics",
+      "documents_money": "Documents and money",
+      "other": "Other",
+      "clothing_footwear": "Clothing and footwear",
+      "first_aid": "First aid",
+      "food": "Food"
+    },
+    "listTypes": {
+      "hiking": "Hiking",
+      "camping": "Camping",
+      "bike_ride": "Bike ride"
+    }
+  }
+}

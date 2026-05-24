@@ -7,9 +7,12 @@ import { Badge } from "~/components/ui/badge"
 import { DeleteList } from "../delete-list"
 import { EditList } from "../edit-list"
 import { Skeleton } from "~/components/ui/skeleton"
+import { useTranslations } from "next-intl"
+import type { PackingListType } from "../../types/types"
 
 export const PackingList = () => {
   const { data: packingLists, isLoading, error } = api.packingLists.getAll.useQuery()
+  const tListTypes = useTranslations("packing.listTypes")
 
   if (isLoading) {
     return (
@@ -48,7 +51,7 @@ export const PackingList = () => {
             <Card key={item.id} className="transition hover:bg-muted/30 ">
               <CardHeader className="flex flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-base">{item.title}</CardTitle>
-                <Badge variant="secondary">{item.type}</Badge>
+                <Badge variant="secondary">{tListTypes(item.type as PackingListType)}</Badge>
               </CardHeader>
     
               <CardContent className="flex items-center justify-between">

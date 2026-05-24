@@ -19,9 +19,11 @@ import { type PackingListSchema, packingListSchema } from "../../schemas/packing
 import { PackingListType } from "../../types/types"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 export const CreateList = () => {
   const [open, setOpen] = useState(false)
+  const tListTypes = useTranslations("packing.listTypes")
 
   const utils = api.useUtils()
 
@@ -92,10 +94,10 @@ export const CreateList = () => {
                         onValueChange={field.onChange}
                         className="flex gap-6"
                       >
-                        {Object.entries(PackingListType).map(([key, value]) => (
+                        {Object.values(PackingListType).map((value) => (
                           <label key={value} className="flex items-center gap-2 cursor-pointer">
                             <RadioGroupItem value={value} />
-                            <span className="capitalize">{key}</span>
+                            <span>{tListTypes(value)}</span>
                           </label>
                         ))}
                       </RadioGroup>

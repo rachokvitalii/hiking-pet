@@ -4,7 +4,7 @@ import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { api } from "~/trpc/server"
-import { HIKE_TYPE_LABEL } from "~/types/types";
+import { HIKE_TYPE_LABEL, HIKE_TYPES, type HikeType } from "~/types/types";
 import Link from "next/link"
 import { routes } from "~/shared/routes"
 import { PackingList } from "~/features/packing-lists/components/packing-list"
@@ -30,11 +30,12 @@ function avatarUrlPlaceholder(_profile: UserProfile) {
   return ""
 }
 
+const isHikeType = (value: string): value is HikeType =>
+  (HIKE_TYPES as readonly string[]).includes(value)
+
 const preferredHikeType = (value: string | null) => {
   if (!value) return "Not set"
-
-  const label = HIKE_TYPE_LABEL[value] ?? value;
-  return label
+  return isHikeType(value) ? HIKE_TYPE_LABEL[value] : value
 }
 
 const Profile: FC = async () => {

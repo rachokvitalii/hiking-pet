@@ -2,9 +2,11 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/sonner"
+import { defaultLocale } from "~/i18n/request";
 
 export const metadata: Metadata = {
   title: "Hiking",
@@ -21,9 +23,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable} dark`}>
+    <html lang={defaultLocale} className={`${geist.variable} dark`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <NextIntlClientProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </NextIntlClientProvider>
         <Toaster
           toastOptions={{
             duration: 6000,

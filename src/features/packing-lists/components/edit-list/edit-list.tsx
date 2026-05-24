@@ -1,6 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
+import type { z } from "zod"
+import { useTranslations } from "next-intl"
 import { Button } from "~/components/ui/button"
 import {
   Dialog,
@@ -14,10 +17,8 @@ import { api } from "~/trpc/react"
 import { Field, FieldContent, FieldError, FieldLabel, FieldSet } from "~/components/ui/field"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type PackingListSchema, packingListSchema } from "../../schemas/packing-list-schema"
-import { PackingListType } from "../../types/types"
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
-import { toast } from "sonner"
+import { packingListSchema } from "../../schemas/packing-list-schema"
+import type { PackingListType } from "../../types/types"
 
 type EditListProps = {
   list: {
@@ -29,14 +30,17 @@ type EditListProps = {
 
 export const EditList = ({ list }: EditListProps) => {
   const [open, setOpen] = useState(false)
+  const tListTypes = useTranslations("packing.listTypes")
 
   const utils = api.useUtils()
 
-  const form = useForm<PackingListSchema>({
-    resolver: zodResolver(packingListSchema),
+  const editSchema = packingListSchema.pick({ title: true })
+  type EditSchema = z.infer<typeof editSchema>
+
+  const form = useForm<EditSchema>({
+    resolver: zodResolver(editSchema),
     defaultValues: {
       title: list.title,
-      type: list.type as PackingListType,
     },
   })
 
@@ -51,13 +55,13 @@ export const EditList = ({ list }: EditListProps) => {
     },
   })
 
-  const onSubmit = (data: PackingListSchema) => {
-    updateList.mutate({ ...data, id: list.id })
+  const onSubmit = (data: EditSchema) => {
+    updateList.mutate({ ...data, type: list.type as PackingListType, id: list.id })
   }
 
   const handleOpenChange = (value: boolean) => {
     if (!value) {
-      form.reset({ title: list.title, type: list.type as PackingListType })
+      form.reset({ title: list.title })
     }
     setOpen(value)
   }
@@ -89,32 +93,14 @@ export const EditList = ({ list }: EditListProps) => {
                   {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
                 </Field>
               )} />
-              <Controller
-                control={form.control}
-                name="type"
-                render={({ field, fieldState }) => (
-                  <Field className="flex flex-col gap-2">
-                    <FieldLabel>Type of journey</FieldLabel>
-                    <FieldContent>
-                      <RadioGroup
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        className="flex gap-6"
-                      >
-                        {Object.entries(PackingListType).map(([key, value]) => (
-                          <label key={value} className="flex items-center gap-2 cursor-pointer">
-                            <RadioGroupItem value={value} />
-                            <span className="capitalize">{key}</span>
-                          </label>
-                        ))}
-                      </RadioGroup>
-                    </FieldContent>
-                    {fieldState.invalid && (
-                      <FieldError>{fieldState.error?.message}</FieldError>
-                    )}
-                  </Field>
-                )}
-              />
+              <Field className="flex flex-col gap-2">
+                <FieldLabel>Type of journey</FieldLabel>
+                <FieldContent>
+                  <span className="text-sm text-muted-foreground">
+                    {tListTypes(list.type as PackingListType)}
+                  </span>
+                </FieldContent>
+              </Field>
             </FieldSet>
           </form>
 

@@ -9,6 +9,7 @@ export {
   packingListItemsRelations,
 } from "./relations-schema";
 export {
+  gearCategoryEnum,
   packingListTypeEnum,
   packingLists,
   gearCategories,

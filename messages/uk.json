@@ -1,0 +1,22 @@
+{
+  "packing": {
+    "categories": {
+      "bivouac": "Бівак",
+      "kitchen": "Кухня",
+      "hygiene": "Гігієна",
+      "gear": "Спорядження",
+      "navigation": "Навігація",
+      "electronics": "Електроніка",
+      "documents_money": "Документи і гроші",
+      "other": "Інше",
+      "clothing_footwear": "Одяг і взуття",
+      "first_aid": "Аптечка",
+      "food": "Їжа"
+    },
+    "listTypes": {
+      "hiking": "Похід",
+      "camping": "Кемпінг",
+      "bike_ride": "Велопоїздка"
+    }
+  }
+}

@@ -64,7 +64,7 @@ export const authConfig = {
             id: user.id.toString(),
             email: user.email
           }
-        } catch(e) {
+        } catch {
           throw new Error("Auth failed")
         }
       },

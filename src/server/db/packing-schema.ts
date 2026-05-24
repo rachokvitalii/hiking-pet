@@ -17,6 +17,20 @@ export const packingListTypeEnum = pgEnum('packing_list_type', [
   'bike_ride',
 ])
 
+export const gearCategoryEnum = pgEnum('gear_category', [
+  'bivouac',
+  'kitchen',
+  'hygiene',
+  'gear',
+  'navigation',
+  'electronics',
+  'documents_money',
+  'other',
+  'clothing_footwear',
+  'first_aid',
+  'food',
+])
+
 export const packingLists = pgTable(
   'packing_lists',
   {
@@ -41,9 +55,7 @@ export const packingLists = pgTable(
 export const gearCategories = pgTable('gear_categories', {
   id: serial('id').primaryKey(),
 
-  name: varchar('name', { length: 128 }).notNull(),
-
-  slug: varchar('slug', { length: 128 }).notNull().unique(),
+  key: gearCategoryEnum('key').notNull().unique(),
 
   sortOrder: integer('sort_order').notNull(),
 })
