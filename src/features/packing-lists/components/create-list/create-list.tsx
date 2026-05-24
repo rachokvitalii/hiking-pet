@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { type PackingListSchema, packingListSchema } from "../../schemas/packing-list-schema"
 import { PackingListType } from "../../types/types"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
+import { toast } from "sonner"
 
 export const CreateList = () => {
   const [open, setOpen] = useState(false)
@@ -37,6 +38,9 @@ export const CreateList = () => {
       await utils.packingLists.getAll.invalidate()
       setOpen(false)
       form.reset()
+    },
+    onError: () => {
+      toast.error("Failed to create list")
     },
   })
 
@@ -66,7 +70,7 @@ export const CreateList = () => {
             id="create-list-form"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <FieldSet disabled={form.formState.isSubmitting} className="flex flex-col gap-4">
+            <FieldSet disabled={createList.isPending} className="flex flex-col gap-4">
               <Controller control={form.control} name="title" render={({ field, fieldState }) => (
                 <Field className="flex flex-col gap-2">
                   <FieldLabel>List name</FieldLabel>
@@ -119,7 +123,7 @@ export const CreateList = () => {
               className="cursor-pointer"
               type="submit"
               form="create-list-form"
-              disabled={form.formState.isSubmitting}
+              disabled={createList.isPending}
             >
               {createList.isPending ? "Creating..." : "Create"}
             </Button>
