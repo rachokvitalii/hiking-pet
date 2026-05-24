@@ -82,7 +82,6 @@ export const CreateList = () => {
                 render={({ field, fieldState }) => (
                   <Field className="flex flex-col gap-2">
                     <FieldLabel>Type of journey</FieldLabel>
-
                     <FieldContent>
                       <RadioGroup
                         value={field.value}
@@ -92,7 +91,7 @@ export const CreateList = () => {
                         {Object.entries(PackingListType).map(([key, value]) => (
                           <label key={value} className="flex items-center gap-2 cursor-pointer">
                             <RadioGroupItem value={value} />
-                            <span>{key}</span>
+                            <span className="capitalize">{key}</span>
                           </label>
                         ))}
                       </RadioGroup>

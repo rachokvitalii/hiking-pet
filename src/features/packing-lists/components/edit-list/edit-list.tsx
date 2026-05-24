@@ -89,7 +89,6 @@ export const EditList = ({ list }: EditListProps) => {
                   {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
                 </Field>
               )} />
-
               <Controller
                 control={form.control}
                 name="type"
@@ -102,10 +101,10 @@ export const EditList = ({ list }: EditListProps) => {
                         onValueChange={field.onChange}
                         className="flex gap-6"
                       >
-                        {Object.values(PackingListType).map((value) => (
+                        {Object.entries(PackingListType).map(([key, value]) => (
                           <label key={value} className="flex items-center gap-2 cursor-pointer">
                             <RadioGroupItem value={value} />
-                            <span className="capitalize">{value}</span>
+                            <span className="capitalize">{key}</span>
                           </label>
                         ))}
                       </RadioGroup>
