@@ -8,6 +8,7 @@ import {
   timestamp,
   varchar,
   index,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core'
 import { users } from './users-schema'
 
@@ -69,7 +70,7 @@ export const gearCatalogItems = pgTable(
       .notNull()
       .references(() => gearCategories.id, { onDelete: 'cascade' }),
 
-    name: varchar('name', { length: 128 }).notNull(),
+    key: varchar('key', { length: 128 }).notNull(),
 
     sortOrder: integer('sort_order').notNull(),
 
@@ -77,6 +78,7 @@ export const gearCatalogItems = pgTable(
   },
   (table) => [
     index('gear_catalog_items_category_id_idx').on(table.categoryId),
+    uniqueIndex('gear_catalog_items_category_key_unique').on(table.categoryId, table.key),
   ]
 )
 
