@@ -8,6 +8,7 @@ import { HIKE_TYPE_LABEL, HIKE_TYPES, type HikeType } from "~/types/types";
 import Link from "next/link"
 import { routes } from "~/shared/routes"
 import { PackingList } from "~/features/packing-lists/components/packing-list"
+import { CreateList } from "~/features/packing-lists/components/create-list"
 
 type UserProfile = {
   userId: number
@@ -102,6 +103,7 @@ const Profile: FC = async () => {
             </CardHeader>
 
             <CardContent className="space-y-5">
+              <CreateList />
               <PackingList />
             </CardContent>
           </Card>

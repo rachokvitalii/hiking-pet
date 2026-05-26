@@ -1,1 +1,1 @@
-export { PackingList } from "./packing-list"
+export { PackingList } from "./packing-list";

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Checkbox } from "~/components/ui/checkbox";
 import { api } from "~/trpc/react";
 
-type PackingCatalogItemCheckboxProps = {
+type CatalogItemCheckboxProps = {
   listId: number;
   item: {
     id: number;
@@ -14,25 +14,27 @@ type PackingCatalogItemCheckboxProps = {
   disabled?: boolean;
 };
 
-export const PackingCatalogItemCheckbox = ({
+export const CatalogItemCheckbox = ({
   listId,
   item,
   label,
   checked,
   disabled = false,
-}: PackingCatalogItemCheckboxProps) => {
+}: CatalogItemCheckboxProps) => {
   const utils = api.useUtils();
 
   const setCatalogItemIncluded =
-    api.packingLists.setCatalogItemIncluded.useMutation({
+    api.gearCatalog.setCatalogItemIncluded.useMutation({
       onMutate: async (variables) => {
-        await utils.packingLists.getItems.cancel({ listId: variables.listId });
-
-        const previousItems = utils.packingLists.getItems.getData({
+        await utils.gearCatalog.getCheckedItems.cancel({
           listId: variables.listId,
         });
 
-        utils.packingLists.getItems.setData(
+        const previousItems = utils.gearCatalog.getCheckedItems.getData({
+          listId: variables.listId,
+        });
+
+        utils.gearCatalog.getCheckedItems.setData(
           { listId: variables.listId },
           (currentItems) => {
             const items = currentItems ?? [];
@@ -64,14 +66,14 @@ export const PackingCatalogItemCheckbox = ({
         return { previousItems };
       },
       onError: (_error, variables, context) => {
-        utils.packingLists.getItems.setData(
+        utils.gearCatalog.getCheckedItems.setData(
           { listId: variables.listId },
           context?.previousItems,
         );
         toast.error("Failed to update item");
       },
       onSettled: async (_data, _error, variables) => {
-        await utils.packingLists.getItems.invalidate({
+        await utils.gearCatalog.getCheckedItems.invalidate({
           listId: variables.listId,
         });
       },

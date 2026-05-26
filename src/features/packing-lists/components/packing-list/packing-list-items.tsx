@@ -5,8 +5,10 @@ import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import type { RouterOutputs } from "~/trpc/react";
 import { DeleteList } from "../delete-list";
-import { EditList } from "../edit-list";
 import type { PackingListType } from "../../types/types";
+import { Button } from "~/components/ui/button";
+import { routes } from "~/shared/routes";
+import Link from "next/link";
 
 type PackingListItemsProps = {
   items: RouterOutputs["packingLists"]["getAll"];
@@ -40,7 +42,9 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
             </div>
 
             <div className="flex gap-2">
-              <EditList list={item} />
+              <Button asChild size="sm" variant="outline" className="cursor-pointer">
+                <Link href={routes.packingList(item.id)}>Edit</Link>
+              </Button>
               <DeleteList id={item.id} />
             </div>
           </CardContent>

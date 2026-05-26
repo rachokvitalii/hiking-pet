@@ -1,1 +1,1 @@
-export { EditList } from "./edit-list"
+export { EditListPage } from "./edit-list-page";

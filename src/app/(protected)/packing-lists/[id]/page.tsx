@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { EditListPage } from "~/features/packing-lists/components/edit-list/edit-list-page";
+import { EditListPage } from "~/features/packing-lists/components/edit-list";
 import { api } from "~/trpc/server";
 
 type PackingListPageProps = {

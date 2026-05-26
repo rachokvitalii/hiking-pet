@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "~/trpc/react";
-import { CreateList } from "../create-list";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { PackingListItems } from "./packing-list-items";
@@ -42,9 +41,6 @@ export const PackingList = () => {
   }
 
   return (
-    <div>
-      <CreateList />
-      <PackingListItems items={packingLists ?? []} />
-    </div>
+    <PackingListItems items={packingLists ?? []} />
   );
 };
