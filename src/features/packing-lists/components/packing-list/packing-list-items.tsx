@@ -1,0 +1,51 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Badge } from "~/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import type { RouterOutputs } from "~/trpc/react";
+import { DeleteList } from "../delete-list";
+import { EditList } from "../edit-list";
+import type { PackingListType } from "../../types/types";
+
+type PackingListItemsProps = {
+  items: RouterOutputs["packingLists"]["getAll"];
+};
+
+export const PackingListItems = ({ items }: PackingListItemsProps) => {
+  const tListTypes = useTranslations("packing.listTypes");
+
+  if (items.length === 0) {
+    return (
+      <div className="text-muted-foreground mt-10 text-center">
+        No packing lists found.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {items.map((item) => (
+        <Card key={item.id} className="hover:bg-muted/30 transition">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-base">{item.title}</CardTitle>
+            <Badge variant="secondary">
+              {tListTypes(item.type as PackingListType)}
+            </Badge>
+          </CardHeader>
+
+          <CardContent className="flex items-center justify-between">
+            <div className="text-muted-foreground text-xs">
+              Created: {new Date(item.createdAt).toLocaleDateString()}
+            </div>
+
+            <div className="flex gap-2">
+              <EditList list={item} />
+              <DeleteList id={item.id} />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+};

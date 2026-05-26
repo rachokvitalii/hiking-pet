@@ -1,18 +1,17 @@
-"use client"
+"use client";
 
-import { api } from "~/trpc/react"
-import { CreateList } from "../create-list"
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
-import { Badge } from "~/components/ui/badge"
-import { DeleteList } from "../delete-list"
-import { EditList } from "../edit-list"
-import { Skeleton } from "~/components/ui/skeleton"
-import { useTranslations } from "next-intl"
-import type { PackingListType } from "../../types/types"
+import { api } from "~/trpc/react";
+import { CreateList } from "../create-list";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
+import { PackingListItems } from "./packing-list-items";
 
 export const PackingList = () => {
-  const { data: packingLists, isLoading, error } = api.packingLists.getAll.useQuery()
-  const tListTypes = useTranslations("packing.listTypes")
+  const {
+    data: packingLists,
+    isLoading,
+    error,
+  } = api.packingLists.getAll.useQuery();
 
   if (isLoading) {
     return (
@@ -29,47 +28,23 @@ export const PackingList = () => {
           </Card>
         ))}
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
       <Card>
-        <CardContent className="pt-6 text-sm text-destructive">
+        <CardContent className="text-destructive pt-6 text-sm">
           {error.message}
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
     <div>
       <CreateList />
-      {packingLists && packingLists.length > 0 ? (
-        <div className="space-y-4">
-          {packingLists.map((item) => (
-            <Card key={item.id} className="transition hover:bg-muted/30 ">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                <CardTitle className="text-base">{item.title}</CardTitle>
-                <Badge variant="secondary">{tListTypes(item.type as PackingListType)}</Badge>
-              </CardHeader>
-    
-              <CardContent className="flex items-center justify-between">
-                <div className="text-xs text-muted-foreground">
-                  Created: {new Date(item.createdAt).toLocaleDateString()}
-                </div>
-    
-                <div className="flex gap-2">
-                  <EditList list={item} />
-                  <DeleteList id={item.id} />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <div className="mt-10 text-center text-muted-foreground">No packing lists found.</div>
-      )}
+      <PackingListItems items={packingLists ?? []} />
     </div>
-  )
-}
+  );
+};
