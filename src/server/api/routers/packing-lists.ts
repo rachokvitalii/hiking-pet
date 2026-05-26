@@ -1,5 +1,5 @@
-import { and, asc, eq } from "drizzle-orm";
-import { gearCatalogItems, gearCategories, packingLists } from "~/server/db/packing-schema";
+import { and, eq } from "drizzle-orm";
+import { packingLists } from "~/server/db/packing-schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { packingListSchema } from "~/features/packing-lists/schemas/packing-list-schema";
 import z from "zod";
@@ -12,39 +12,6 @@ export const packingListsRouter = createTRPCRouter({
 
     return lists ?? []
   }),
-  getCategories: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select({
-        id: gearCategories.id,
-        key: gearCategories.key,
-        sortOrder: gearCategories.sortOrder,
-      })
-      .from(gearCategories)
-      .orderBy(asc(gearCategories.sortOrder))
-  }),
-  getCatalogItems: protectedProcedure
-    .input(z.object({ categoryId: z.number().optional() }).optional())
-    .query(async ({ ctx, input }) => {
-      const baseQuery = ctx.db
-        .select({
-          id: gearCatalogItems.id,
-          categoryId: gearCatalogItems.categoryId,
-          key: gearCatalogItems.key,
-          sortOrder: gearCatalogItems.sortOrder,
-          isDefault: gearCatalogItems.isDefault,
-        })
-        .from(gearCatalogItems)
-        .$dynamic()
-
-      if (input?.categoryId) {
-        baseQuery.where(eq(gearCatalogItems.categoryId, input.categoryId))
-      }
-
-      return baseQuery.orderBy(
-        asc(gearCatalogItems.categoryId),
-        asc(gearCatalogItems.sortOrder)
-      )
-    }),
   create: protectedProcedure.input(packingListSchema).mutation(async ({ ctx, input }) => {
     const userId = Number(ctx.userId)
 
@@ -54,11 +21,6 @@ export const packingListsRouter = createTRPCRouter({
     }).returning()
 
     return newList
-  }),
-  delete: protectedProcedure.input(z.object({ id: z.number() })).mutation(async ({ ctx, input }) => {
-    const userId = Number(ctx.userId)
-
-    await ctx.db.delete(packingLists).where(and(eq(packingLists.id, input.id), eq(packingLists.userId, userId)))
   }),
   update: protectedProcedure.input(packingListSchema.extend({ id: z.number() })).mutation(async ({ ctx, input }) => {
     const userId = Number(ctx.userId)
@@ -71,5 +33,10 @@ export const packingListsRouter = createTRPCRouter({
       .returning()
 
     return updated
+  }),
+  delete: protectedProcedure.input(z.object({ id: z.number() })).mutation(async ({ ctx, input }) => {
+    const userId = Number(ctx.userId)
+
+    await ctx.db.delete(packingLists).where(and(eq(packingLists.id, input.id), eq(packingLists.userId, userId)))
   }),
 });

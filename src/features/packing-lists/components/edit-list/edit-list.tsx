@@ -42,14 +42,13 @@ export const EditList = ({ list }: EditListProps) => {
   const tCatalogItems = useTranslations("packing.catalogItems")
 
   const utils = api.useUtils()
-  const { data: categories = [], isLoading: isCategoriesLoading } = api.packingLists.getCategories.useQuery(undefined, {
+  const { data: categories = [], isLoading: isCategoriesLoading } = api.gearCatalog.getCategories.useQuery(undefined, {
     enabled: open,
   })
-  const { data: catalogItems = [], isLoading: isCatalogItemsLoading } = api.packingLists.getCatalogItems.useQuery(undefined, {
+  const { data: catalogItems = [], isLoading: isCatalogItemsLoading } = api.gearCatalog.getCatalogItems.useQuery(undefined, {
     enabled: open,
   })
 
-  console.log(catalogItems)
   const catalogItemsByCategoryId = useMemo(() => {
     const itemsByCategoryId = new Map<number, typeof catalogItems>()
 
