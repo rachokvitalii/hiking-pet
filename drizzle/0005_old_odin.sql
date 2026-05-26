@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "packing_list_items_list_catalog_unique" ON "packing_list_items" USING btree ("packing_list_id","catalog_item_id");

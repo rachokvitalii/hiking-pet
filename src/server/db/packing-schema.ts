@@ -115,5 +115,9 @@ export const packingListItems = pgTable(
   (table) => [
     index('packing_list_items_list_id_idx').on(table.packingListId),
     index('packing_list_items_category_id_idx').on(table.categoryId),
+    uniqueIndex('packing_list_items_list_catalog_unique').on(
+      table.packingListId,
+      table.catalogItemId,
+    ),
   ]
 )
