@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "sonner"
 import type { z } from "zod"
 import { useTranslations } from "next-intl"
@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion"
 import { Button } from "~/components/ui/button"
+import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogContent,
@@ -38,11 +39,28 @@ export const EditList = ({ list }: EditListProps) => {
   const [open, setOpen] = useState(false)
   const tListTypes = useTranslations("packing.listTypes")
   const tCategories = useTranslations("packing.categories")
+  const tCatalogItems = useTranslations("packing.catalogItems")
 
   const utils = api.useUtils()
   const { data: categories = [], isLoading: isCategoriesLoading } = api.packingLists.getCategories.useQuery(undefined, {
     enabled: open,
   })
+  const { data: catalogItems = [], isLoading: isCatalogItemsLoading } = api.packingLists.getCatalogItems.useQuery(undefined, {
+    enabled: open,
+  })
+
+  console.log(catalogItems)
+  const catalogItemsByCategoryId = useMemo(() => {
+    const itemsByCategoryId = new Map<number, typeof catalogItems>()
+
+    for (const item of catalogItems) {
+      const items = itemsByCategoryId.get(item.categoryId) ?? []
+      items.push(item)
+      itemsByCategoryId.set(item.categoryId, items)
+    }
+
+    return itemsByCategoryId
+  }, [catalogItems])
 
   const editSchema = packingListSchema.pick({ title: true })
   type EditSchema = z.infer<typeof editSchema>
@@ -83,7 +101,7 @@ export const EditList = ({ list }: EditListProps) => {
       </Button>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto sm:max-w-[560px]">
           <DialogHeader>
             <DialogTitle>Edit list</DialogTitle>
           </DialogHeader>
@@ -124,9 +142,21 @@ export const EditList = ({ list }: EditListProps) => {
                             {tCategories(category.key)}
                           </AccordionTrigger>
                           <AccordionContent>
-                            <span className="text-sm text-muted-foreground">
-                              Gear catalog items will appear here.
-                            </span>
+                            {isCatalogItemsLoading ? (
+                              <span className="text-sm text-muted-foreground">Loading...</span>
+                            ) : (
+                              <div className="grid gap-2">
+                                {(catalogItemsByCategoryId.get(category.id) ?? []).map((item) => (
+                                  <label
+                                    key={item.id}
+                                    className="flex min-h-8 cursor-pointer items-center gap-3 rounded-md px-1 text-sm"
+                                  >
+                                    <Checkbox />
+                                    <span>{tCatalogItems(item.key)}</span>
+                                  </label>
+                                ))}
+                              </div>
+                            )}
                           </AccordionContent>
                         </AccordionItem>
                       ))}
