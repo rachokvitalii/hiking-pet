@@ -1,0 +1,20 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e5]: Login
+      - generic [ref=e6]:
+        - group [ref=e8]:
+          - group [ref=e9]:
+            - generic [ref=e10]: Email
+            - textbox [ref=e12]
+          - group [ref=e13]:
+            - generic [ref=e14]: Password
+            - textbox [ref=e16]
+          - group [ref=e17]:
+            - button "Login" [ref=e18] [cursor=pointer]
+        - generic [ref=e19]:
+          - text: Don't have an account?
+          - link "Register" [ref=e20] [cursor=pointer]:
+            - /url: /register
+  - region "Notifications alt+T"
+  - alert [ref=e21]
