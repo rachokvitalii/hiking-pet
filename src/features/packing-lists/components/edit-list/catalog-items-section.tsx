@@ -20,24 +20,10 @@ export const CatalogItemsSection = ({ listId }: CatalogItemsSectionProps) => {
   const tCategories = useTranslations("packing.categories");
   const tCatalogItems = useTranslations("packing.catalogItems");
 
-  const { data: categories = [], isLoading: isCategoriesLoading } =
-    api.gearCatalog.getCategories.useQuery();
-  const { data: catalogItems = [], isLoading: isCatalogItemsLoading } =
-    api.gearCatalog.getCatalogItems.useQuery();
+  const { data: catalog = [], isLoading: isCatalogLoading } =
+    api.gearCatalog.getCatalog.useQuery();
   const { data: listItems = [], isLoading: isListItemsLoading } =
     api.gearCatalog.getCheckedItems.useQuery({ listId });
-
-  const catalogItemsByCategoryId = useMemo(() => {
-    const itemsByCategoryId = new Map<number, typeof catalogItems>();
-
-    for (const item of catalogItems) {
-      const items = itemsByCategoryId.get(item.categoryId) ?? [];
-      items.push(item);
-      itemsByCategoryId.set(item.categoryId, items);
-    }
-
-    return itemsByCategoryId;
-  }, [catalogItems]);
 
   const selectedCatalogItemIds = useMemo(() => {
     const ids = new Set<number>();
@@ -54,34 +40,26 @@ export const CatalogItemsSection = ({ listId }: CatalogItemsSectionProps) => {
   return (
     <Field className="flex flex-col gap-2">
       <FieldContent>
-        {isCategoriesLoading ? (
+        {isCatalogLoading ? (
           <span className="text-muted-foreground text-sm">Loading...</span>
         ) : (
           <Accordion type="multiple" className="w-full">
-            {categories.map((category) => (
+            {catalog.map((category) => (
               <AccordionItem key={category.id} value={category.key}>
                 <AccordionTrigger>{tCategories(category.key)}</AccordionTrigger>
                 <AccordionContent>
-                  {isCatalogItemsLoading ? (
-                    <span className="text-muted-foreground text-sm">
-                      Loading...
-                    </span>
-                  ) : (
-                    <div className="grid gap-2">
-                      {(catalogItemsByCategoryId.get(category.id) ?? []).map(
-                        (item) => (
-                          <CatalogItemCheckbox
-                            key={item.id}
-                            checked={selectedCatalogItemIds.has(item.id)}
-                            disabled={isListItemsLoading}
-                            item={item}
-                            label={tCatalogItems(item.key)}
-                            listId={listId}
-                          />
-                        ),
-                      )}
-                    </div>
-                  )}
+                  <div className="grid gap-2">
+                    {category.items.map((item) => (
+                      <CatalogItemCheckbox
+                        key={item.id}
+                        checked={selectedCatalogItemIds.has(item.id)}
+                        disabled={isListItemsLoading}
+                        item={item}
+                        label={tCatalogItems(item.key)}
+                        listId={listId}
+                      />
+                    ))}
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             ))}

@@ -10,23 +10,17 @@ import {
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const gearCatalogRouter = createTRPCRouter({
-  // all existing categories, e.g. food, clothing, equipment, etc.
-  getCategories: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select({
-        id: gearCategories.id,
-        key: gearCategories.key,
-        sortOrder: gearCategories.sortOrder,
-      })
-      .from(gearCategories)
-      .orderBy(asc(gearCategories.sortOrder));
-  }),
-
-  // all existing catalog items, e.g. tent, sleeping bag, etc.
-  getCatalogItems: protectedProcedure
-    .input(z.object({ categoryId: z.number().optional() }).optional())
-    .query(async ({ ctx, input }) => {
-      const baseQuery = ctx.db
+  getCatalog: protectedProcedure.query(async ({ ctx }) => {
+    const [categories, catalogItems] = await Promise.all([
+      ctx.db
+        .select({
+          id: gearCategories.id,
+          key: gearCategories.key,
+          sortOrder: gearCategories.sortOrder,
+        })
+        .from(gearCategories)
+        .orderBy(asc(gearCategories.sortOrder)),
+      ctx.db
         .select({
           id: gearCatalogItems.id,
           categoryId: gearCatalogItems.categoryId,
@@ -35,17 +29,25 @@ export const gearCatalogRouter = createTRPCRouter({
           isDefault: gearCatalogItems.isDefault,
         })
         .from(gearCatalogItems)
-        .$dynamic();
+        .orderBy(
+          asc(gearCatalogItems.categoryId),
+          asc(gearCatalogItems.sortOrder),
+        ),
+    ]);
 
-      if (input?.categoryId) {
-        baseQuery.where(eq(gearCatalogItems.categoryId, input.categoryId));
-      }
+    const itemsByCategoryId = new Map<number, typeof catalogItems>();
 
-      return baseQuery.orderBy(
-        asc(gearCatalogItems.categoryId),
-        asc(gearCatalogItems.sortOrder),
-      );
-    }),
+    for (const item of catalogItems) {
+      const items = itemsByCategoryId.get(item.categoryId) ?? [];
+      items.push(item);
+      itemsByCategoryId.set(item.categoryId, items);
+    }
+
+    return categories.map((category) => ({
+      ...category,
+      items: itemsByCategoryId.get(category.id) ?? [],
+    }));
+  }),
 
   // all existing catalog items for a specific packing list (checked items)
   getCheckedItems: protectedProcedure

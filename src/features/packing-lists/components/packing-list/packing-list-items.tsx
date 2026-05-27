@@ -46,7 +46,9 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
 
             <div className="flex gap-2">
               <Button asChild size="sm" variant="outline" className="cursor-pointer">
-                <Link href={routes.packingList(item.id)}>Edit</Link>
+                <Link href={routes.packingList(item.id)} prefetch>
+                  Edit
+                </Link>
               </Button>
               <DeleteList id={item.id} />
             </div>
