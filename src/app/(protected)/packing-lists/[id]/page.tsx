@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { EditListPage } from "~/features/packing-lists/components/edit-list";
-import { api } from "~/trpc/server";
+import { api, HydrateClient } from "~/trpc/server";
 
 type PackingListPageProps = {
   params: Promise<{
@@ -24,5 +24,12 @@ export default async function PackingListPage({
     notFound();
   }
 
-  return <EditListPage list={list} />;
+  void api.gearCatalog.getCatalog.prefetch();
+  void api.gearCatalog.getCheckedItems.prefetch({ listId });
+
+  return (
+    <HydrateClient>
+      <EditListPage list={list} />
+    </HydrateClient>
+  );
 }
