@@ -26,12 +26,15 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {items.map((item) => (
-        <Card key={item.id} className="hover:bg-muted/30 transition">
+        <Card key={item.id} className="relative hover:bg-muted/30 transition">
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-base">{item.title}</CardTitle>
-            <Badge variant="secondary">
+            <Badge
+              className="absolute top-0 right-4 -translate-y-1/2"
+              variant="default"
+            >
               {tListTypes(item.type as PackingListType)}
             </Badge>
           </CardHeader>

@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { Field, FieldContent, FieldLabel } from "~/components/ui/field";
+import { Field, FieldContent } from "~/components/ui/field";
 import { api } from "~/trpc/react";
 import { CatalogItemCheckbox } from "./catalog-item-checkbox";
 

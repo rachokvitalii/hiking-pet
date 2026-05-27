@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { packingLists } from "~/server/db/packing-schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { packingListSchema } from "~/features/packing-lists/schemas/packing-list-schema";
@@ -11,7 +11,8 @@ export const packingListsRouter = createTRPCRouter({
     const lists = await ctx.db
       .select()
       .from(packingLists)
-      .where(eq(packingLists.userId, userId));
+      .where(eq(packingLists.userId, userId))
+      .orderBy(desc(packingLists.createdAt));
 
     return lists ?? [];
   }),

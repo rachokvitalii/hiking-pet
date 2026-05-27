@@ -279,3 +279,17 @@ https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/
 [ 4601520ms] [LOG] [Fast Refresh] done in 223ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
 [ 4617281ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
 [ 4617482ms] [LOG] [Fast Refresh] done in 304ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
+[ 5244411ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
+[ 5244542ms] [LOG] [Fast Refresh] done in 209ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
+[ 5258062ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
+[ 5258247ms] [LOG] [Fast Refresh] done in 265ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
+[ 5287703ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
+[ 5287927ms] [LOG] [Fast Refresh] done in 296ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
+[ 5290205ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
+[ 5290516ms] [LOG] [Fast Refresh] done in 371ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
+[ 5562182ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
+[ 5562559ms] [LOG] [Fast Refresh] done in 480ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
+[ 5644242ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
+[ 5644326ms] [LOG] [Fast Refresh] done in 187ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
+[ 5665444ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5949
+[ 5666047ms] [LOG] [Fast Refresh] done in 705ms @ http://localhost:3000/_next/static/chunks/56a5d_next_dist_client_a85426b3._.js:5809
