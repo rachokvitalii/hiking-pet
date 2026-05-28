@@ -8,7 +8,7 @@ export const userProfile = pgTable("user_profile", {
   displayName: text("display_name"),
   homeRegion: text("home_region"),
   experienceLevel: text("experience_level"),
-  preferredHikeType: text("preferred_hike_type"),
+  preferredTripDuration: text("preferred_trip_duration"),
   maxDailyKm: integer("max_daily_km"),
   gear: jsonb("gear").$type<string[]>(),
 });

@@ -12,7 +12,7 @@ import {
 } from 'drizzle-orm/pg-core'
 import { users } from './users-schema'
 
-export const packingListTypeEnum = pgEnum('packing_list_type', [
+export const tripTypeEnum = pgEnum('trip_type', [
   'hiking',
   'camping',
   'bike_ride',
@@ -43,7 +43,7 @@ export const packingLists = pgTable(
 
     title: varchar('title', { length: 128 }).notNull(),
 
-    type: packingListTypeEnum('type').notNull(),
+    type: tripTypeEnum('type').notNull(),
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),

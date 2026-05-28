@@ -5,7 +5,6 @@ import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import type { RouterOutputs } from "~/trpc/react";
 import { DeleteList } from "../delete-list";
-import type { PackingListType } from "../../types/types";
 import { Button } from "~/components/ui/button";
 import { routes } from "~/shared/routes";
 import Link from "next/link";
@@ -35,7 +34,7 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
               className="absolute top-0 right-4 -translate-y-1/2"
               variant="default"
             >
-              {tListTypes(item.type as PackingListType)}
+              {tListTypes(item.type)}
             </Badge>
           </CardHeader>
 

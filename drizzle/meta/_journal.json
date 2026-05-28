@@ -43,6 +43,13 @@
       "when": 1779802500154,
       "tag": "0005_old_odin",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1779974460651,
+      "tag": "0006_great_squadron_sinister",
+      "breakpoints": true
     }
   ]
 }

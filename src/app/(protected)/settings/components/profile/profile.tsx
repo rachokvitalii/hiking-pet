@@ -8,7 +8,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
 import { api } from "~/trpc/react";
-import { EXPERIENCE_LEVEL_LABEL, EXPERIENCE_LEVELS, HIKE_TYPE_LABEL, HIKE_TYPES } from "~/types/types";
+import { EXPERIENCE_LEVEL_LABEL, EXPERIENCE_LEVELS, TRIP_DURATIONS_LABEL, TRIP_DURATIONS } from "~/types/types";
 
 const selectClassName = "h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
 
@@ -16,7 +16,7 @@ const defaultValues: ProfileSchema = {
   displayName: null,
   homeRegion: null,
   experienceLevel: null,
-  preferredHikeType: null,
+  preferredTripDuration: null,
   maxDailyKm: null,
   gear: null,
 }
@@ -31,7 +31,7 @@ const Profile = () => {
       displayName: me.data.displayName ?? null,
       homeRegion: me.data.homeRegion ?? null,
       experienceLevel: (me.data.experienceLevel as ProfileSchema["experienceLevel"]) ?? null,
-      preferredHikeType: (me.data.preferredHikeType as ProfileSchema["preferredHikeType"]) ?? null,
+      preferredTripDuration: (me.data.preferredTripDuration as ProfileSchema["preferredTripDuration"]) ?? null,
       maxDailyKm: me.data.maxDailyKm ?? null,
       gear: null,
     } : undefined,
@@ -91,9 +91,9 @@ const Profile = () => {
             {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
           </Field>
         )} />
-        <Controller control={form.control} name="preferredHikeType" render={({ field, fieldState }) => (
+        <Controller control={form.control} name="preferredTripDuration" render={({ field, fieldState }) => (
           <Field className="flex flex-col gap-2">
-            <FieldLabel>Preferred Hike Type</FieldLabel>
+            <FieldLabel>Preferred Trip Duration</FieldLabel>
             <FieldContent>
               <select
                 {...field}
@@ -102,9 +102,9 @@ const Profile = () => {
                 className={selectClassName}
                 aria-invalid={fieldState.invalid}
               >
-                <option value="">Select hike type</option>
-                {HIKE_TYPES.map((value) => (
-                  <option key={value} value={value}>{HIKE_TYPE_LABEL[value]}</option>
+                <option value="">Select trip duration</option>
+                {TRIP_DURATIONS.map((value) => (
+                  <option key={value} value={value}>{TRIP_DURATIONS_LABEL[value]}</option>
                 ))}
               </select>
             </FieldContent>

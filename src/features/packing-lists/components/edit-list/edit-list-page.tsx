@@ -8,7 +8,7 @@ import { Badge } from "~/components/ui/badge";
 import { Card, CardContent } from "~/components/ui/card";
 import { FieldSet } from "~/components/ui/field";
 import { routes } from "~/shared/routes";
-import type { PackingListType } from "../../types/types";
+import { type TripType } from "~/types/types";
 import { CatalogItemsSection } from "./catalog-items-section";
 import { EditableListTitle } from "./editable-list-title";
 
@@ -39,7 +39,7 @@ export const EditListPage = ({ list }: EditListPageProps) => {
           className="absolute top-0 right-4 -translate-y-1/2"
           variant="default"
         >
-          {tListTypes(list.type as PackingListType)}
+          {tListTypes(list.type as TripType)}
         </Badge>
 
         <CardContent>

@@ -16,7 +16,7 @@ import { Field, FieldContent, FieldError, FieldLabel, FieldSet } from "~/compone
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type PackingListSchema, packingListSchema } from "../../schemas/packing-list-schema"
-import { PackingListType } from "../../types/types"
+import { TRIP_TYPES } from "~/types/types"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
@@ -31,7 +31,7 @@ export const CreateList = () => {
     resolver: zodResolver(packingListSchema),
     defaultValues: {
       title: "",
-      type: PackingListType.Hiking,
+      type: TRIP_TYPES[0],
     },
   })
 
@@ -94,7 +94,7 @@ export const CreateList = () => {
                         onValueChange={field.onChange}
                         className="flex gap-6"
                       >
-                        {Object.values(PackingListType).map((value) => (
+                        {Object.values(TRIP_TYPES).map((value) => (
                           <label key={value} className="flex items-center gap-2 cursor-pointer">
                             <RadioGroupItem value={value} />
                             <span>{tListTypes(value)}</span>

@@ -2,13 +2,15 @@ export type Issues = Array<{ path: PropertyKey[]; message: string }>
 
 export type AuthActionRes = { ok: true } | { ok: false, issues: Issues }
 
-export const HIKE_TYPES = ["one_day", "multy_day", "trail_running"] as const;
-export type HikeType = typeof HIKE_TYPES[number];
+export const TRIP_TYPES = ["hiking", "camping", "bike_ride"] as const;
+export type TripType = typeof TRIP_TYPES[number];
 
-export const HIKE_TYPE_LABEL: Record<HikeType, string> = {
+export const TRIP_DURATIONS = ["one_day", "multy_day"] as const;
+export type TripDuration = typeof TRIP_DURATIONS[number];
+
+export const TRIP_DURATIONS_LABEL: Record<TripDuration, string> = {
   one_day: "One Day",
   multy_day: "Multi Day",
-  trail_running: "Trail Running",
 };
 
 export const EXPERIENCE_LEVELS = ["beginner", "intermediate", "advanced"] as const;
@@ -19,3 +21,20 @@ export const EXPERIENCE_LEVEL_LABEL: Record<ExperienceLevel, string> = {
   intermediate: "Intermediate",
   advanced: "Advanced",
 };
+
+export const SEASONS = ["spring", "summer", "autumn", "winter"] as const;
+export type Season = typeof SEASONS[number];
+
+export type Route = {
+  id: string
+  title: string
+  region: string
+  type: TripType[]
+  difficulty: ExperienceLevel
+  distanceKm: number
+  days: number
+  elevationGain: number
+  seasons: Season[]
+  tags: string[]
+  description: string
+}

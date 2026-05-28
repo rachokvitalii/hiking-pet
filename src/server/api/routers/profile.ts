@@ -24,7 +24,7 @@ export const profileRouter = createTRPCRouter({
         displayName: input.displayName ?? null,
         homeRegion: input.homeRegion ?? null,
         experienceLevel: input.experienceLevel ?? null,
-        preferredHikeType: input.preferredHikeType ?? null,
+        preferredTripDuration: input.preferredTripDuration ?? null,
         maxDailyKm: input.maxDailyKm ?? null,
         gear: input.gear ?? null,
       }

@@ -10,7 +10,7 @@ export {
 } from "./relations-schema";
 export {
   gearCategoryEnum,
-  packingListTypeEnum,
+  tripTypeEnum,
   packingLists,
   gearCategories,
   gearCatalogItems,

@@ -4,7 +4,7 @@ import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { api } from "~/trpc/server"
-import { HIKE_TYPE_LABEL, HIKE_TYPES, type HikeType } from "~/types/types";
+import { TRIP_DURATIONS, TRIP_DURATIONS_LABEL, type TripDuration } from "~/types/types"
 import Link from "next/link"
 import { routes } from "~/shared/routes"
 import { PackingList } from "~/features/packing-lists/components/packing-list"
@@ -15,7 +15,7 @@ type UserProfile = {
   displayName: string | null
   homeRegion: string | null
   experienceLevel: string | null
-  preferredHikeType: string | null
+  preferredTripDuration: string | null
   maxDailyKm: number | null
   gear: string[] | null
 }
@@ -31,12 +31,12 @@ function avatarUrlPlaceholder(_profile: UserProfile) {
   return ""
 }
 
-const isHikeType = (value: string): value is HikeType =>
-  (HIKE_TYPES as readonly string[]).includes(value)
+const isTripDuration = (value: string): value is TripDuration =>
+  (TRIP_DURATIONS as readonly string[]).includes(value)
 
-const preferredHikeType = (value: string | null) => {
+const preferredTripDuration = (value: string | null) => {
   if (!value) return "Not set"
-  return isHikeType(value) ? HIKE_TYPE_LABEL[value] : value
+  return isTripDuration(value) ? TRIP_DURATIONS_LABEL[value] : value
 }
 
 const Profile: FC = async () => {
@@ -109,15 +109,15 @@ const Profile: FC = async () => {
           </Card>
           <Card className="lg:col-span-3">
             <CardHeader>
-              <CardTitle>Hiking preferences</CardTitle>
+              <CardTitle>Trip preferences</CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-5">
               <div className="grid gap-4">
                 <div className="space-y-1">
-                  <div className="text-sm text-muted-foreground">Preferred hike type</div>
+                  <div className="text-sm text-muted-foreground">Preferred trip duration</div>
                   <div className="text-sm font-medium">
-                    {preferredHikeType(profile.preferredHikeType)}
+                    {preferredTripDuration(profile.preferredTripDuration)}
                   </div>
                 </div>
 
