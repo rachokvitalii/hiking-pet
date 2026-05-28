@@ -26,7 +26,6 @@ export const profileRouter = createTRPCRouter({
         experienceLevel: input.experienceLevel ?? null,
         preferredTripDuration: input.preferredTripDuration ?? null,
         maxDailyKm: input.maxDailyKm ?? null,
-        gear: input.gear ?? null,
       }
 
       const updated = await db

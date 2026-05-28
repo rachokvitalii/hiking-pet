@@ -1,4 +1,4 @@
-import { integer, jsonb, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgTable, text } from "drizzle-orm/pg-core";
 import { users } from "./users-schema";
 
 export const userProfile = pgTable("user_profile", {
@@ -10,5 +10,4 @@ export const userProfile = pgTable("user_profile", {
   experienceLevel: text("experience_level"),
   preferredTripDuration: text("preferred_trip_duration"),
   maxDailyKm: integer("max_daily_km"),
-  gear: jsonb("gear").$type<string[]>(),
 });

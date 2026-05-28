@@ -17,8 +17,7 @@ const defaultValues: ProfileSchema = {
   homeRegion: null,
   experienceLevel: null,
   preferredTripDuration: null,
-  maxDailyKm: null,
-  gear: null,
+  maxDailyKm: null
 }
 
 const Profile = () => {
@@ -33,7 +32,6 @@ const Profile = () => {
       experienceLevel: (me.data.experienceLevel as ProfileSchema["experienceLevel"]) ?? null,
       preferredTripDuration: (me.data.preferredTripDuration as ProfileSchema["preferredTripDuration"]) ?? null,
       maxDailyKm: me.data.maxDailyKm ?? null,
-      gear: null,
     } : undefined,
   })
 
@@ -138,8 +136,6 @@ const Profile = () => {
             {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
           </Field>
         )} />
-        {/* TODO: Add gear selection */}
-        {/*  */}
         {form.formState.errors.root?.message && (
           <FieldError>{form.formState.errors.root.message}</FieldError>
         )}

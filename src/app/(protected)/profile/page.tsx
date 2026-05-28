@@ -17,7 +17,6 @@ type UserProfile = {
   experienceLevel: string | null
   preferredTripDuration: string | null
   maxDailyKm: number | null
-  gear: string[] | null
 }
 
 function initials(name?: string | null) {
@@ -56,8 +55,6 @@ const Profile: FC = async () => {
       </main>
     )
   }
-
-  const gear = profile.gear ?? []
 
   return (
     <main className="mx-auto w-full max-w-5xl px-6 pb-10">
@@ -130,22 +127,6 @@ const Profile: FC = async () => {
               </div>
 
               <Separator />
-
-              <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">Gear</div>
-
-                {gear.length ? (
-                  <div className="flex flex-wrap gap-2">
-                    {gear.map((g) => (
-                      <Badge key={g} variant="outline">
-                        {g}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-sm">No gear added yet.</div>
-                )}
-              </div>
             </CardContent>
           </Card>
         </div>
