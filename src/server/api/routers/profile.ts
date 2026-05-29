@@ -1,8 +1,8 @@
 import { compare, hash } from "bcrypt";
 import { eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
-import { changePasswordSchema } from "~/app/(protected)/settings/components/change-password/validation";
-import { profileSchema } from "~/app/(protected)/settings/components/profile/validation";
+import { changePasswordSchema } from "~/features/profile/schemas/change-password-schema";
+import { profileSchema } from "~/features/profile/schemas/profile-schema";
 import { db } from "~/server/db";
 import { userProfile, users } from "~/server/db/schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";

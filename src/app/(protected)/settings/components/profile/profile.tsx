@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm, Controller } from "react-hook-form";
-import { profileSchema, type ProfileSchema } from "./validation";
+import { profileSchema, type ProfileSchema } from "../../../../../features/profile/schemas/profile-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, FieldContent, FieldError, FieldLabel, FieldSet } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";

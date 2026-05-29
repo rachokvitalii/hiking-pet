@@ -3,7 +3,7 @@
 import { Field, FieldContent, FieldError, FieldLabel, FieldSet } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
 import { Controller, useForm } from "react-hook-form"
-import { type ChangePasswordInput, changePasswordSchema } from "./validation"
+import { type ChangePasswordInput, changePasswordSchema } from "../../../../../features/profile/schemas/change-password-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "~/components/ui/button"
 import { toast } from "sonner"
