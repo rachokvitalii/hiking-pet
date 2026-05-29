@@ -20,6 +20,8 @@ import { TRIP_TYPES } from "~/types/types"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
+import { routes } from "~/shared/routes"
+import { useRouter } from "next/navigation"
 
 export const CreateList = () => {
   const [open, setOpen] = useState(false)
@@ -27,7 +29,7 @@ export const CreateList = () => {
   const tToasts = useTranslations("toasts")
   const tListTypes = useTranslations("packing.listTypes")
   const tLists = useTranslations("packing.lists")
-
+  const router = useRouter()
   const utils = api.useUtils()
 
   const form = useForm<PackingListSchema>({
@@ -39,10 +41,13 @@ export const CreateList = () => {
   })
 
   const createList = api.packingLists.create.useMutation({
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       await utils.packingLists.getAll.invalidate()
       setOpen(false)
       form.reset()
+      if (data?.id) {
+        router.push(routes.packingList(data.id))
+      }
     },
     onError: () => {
       toast.error(tToasts("createListFailed"))
