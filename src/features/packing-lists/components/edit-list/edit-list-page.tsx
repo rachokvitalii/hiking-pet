@@ -24,7 +24,7 @@ export const EditListPage = ({ list }: EditListPageProps) => {
   const tListTypes = useTranslations("packing.listTypes");
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-6 pb-10">
+    <>
       <div className="mb-4">
         <Button asChild variant="ghost" className="cursor-pointer">
           <Link href={routes.profile}>
@@ -52,6 +52,6 @@ export const EditListPage = ({ list }: EditListPageProps) => {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </>
   );
 };

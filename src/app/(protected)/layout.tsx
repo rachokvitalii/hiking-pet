@@ -20,7 +20,9 @@ export default async function LoggedInLayout ({
     <>
       <Header />
       <Container className="pt-10">
-        {children}
+        <main className="mx-auto w-full max-w-5xl px-6 pb-10">
+          {children}
+        </main>
       </Container>
     </>
   )
