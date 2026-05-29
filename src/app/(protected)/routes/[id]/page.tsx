@@ -1,16 +1,13 @@
 import {
-  ArrowLeftIcon,
   CalendarDaysIcon,
   MapPinIcon,
   MountainIcon,
   RouteIcon,
   TrendingUpIcon,
 } from "lucide-react";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -22,6 +19,7 @@ import { Separator } from "~/components/ui/separator";
 import { routes } from "~/data/route";
 import { routes as staticRoutes } from "~/shared/routes";
 import type { Route } from "~/types/types";
+import { ButtonBack } from "~/components/button-back";
 
 export default async function RoutePage({
   params,
@@ -31,7 +29,6 @@ export default async function RoutePage({
   const { id } = await params;
   const route = routes.find((route: Route) => route.id === id);
 
-  const tActions = await getTranslations("actions");
   const tRoute = await getTranslations("routes");
 
   if (!route) {
@@ -63,14 +60,7 @@ export default async function RoutePage({
 
   return (
     <div className="space-y-4">
-      <div className="mb-4">
-        <Button asChild variant="ghost" className="cursor-pointer">
-          <Link href={staticRoutes.routes}>
-            <ArrowLeftIcon />
-            {tActions("back")}
-          </Link>
-        </Button>
-      </div>
+      <ButtonBack href={staticRoutes.routes} />
 
       <Card>
         <CardHeader className="gap-4">

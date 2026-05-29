@@ -1,9 +1,6 @@
 "use client";
 
-import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent } from "~/components/ui/card";
 import { FieldSet } from "~/components/ui/field";
@@ -11,6 +8,7 @@ import { routes } from "~/shared/routes";
 import { type TripType } from "~/types/types";
 import { CatalogItemsSection } from "./catalog-items-section";
 import { EditableListTitle } from "./editable-list-title";
+import { ButtonBack } from "~/components/button-back";
 
 type EditListPageProps = {
   list: {
@@ -21,19 +19,11 @@ type EditListPageProps = {
 };
 
 export const EditListPage = ({ list }: EditListPageProps) => {
-  const t = useTranslations("actions");
   const tListTypes = useTranslations("packing.listTypes");
 
   return (
     <>
-      <div className="mb-4">
-        <Button asChild variant="ghost" className="cursor-pointer">
-          <Link href={routes.profile}>
-            <ArrowLeftIcon />
-            {t("back")}
-          </Link>
-        </Button>
-      </div>
+      <ButtonBack href={routes.profile} />
 
       <Card className="relative">
         <Badge
