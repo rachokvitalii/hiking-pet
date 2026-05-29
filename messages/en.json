@@ -6,7 +6,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "cancel": "Cancel",
-    "backToProfile": "Back to profile"
+    "back": "Back"
   },
   "toasts": {
     "accountCreated": "Account has been successfully created",
@@ -35,6 +35,37 @@
     "tripDurations": {
       "one_day": "One Day",
       "multy_day": "Multi Day"
+    }
+  },
+  "routes": {
+    "labels": {
+      "distance": "Distance",
+      "duration": "Duration",
+      "elevationGain": "Elevation gain",
+      "region": "Region",
+      "seasons": "Best seasons",
+      "tags": "Tags"
+    },
+    "units": {
+      "kilometers": "{value} km",
+      "meters": "{value} m",
+      "days": "{count, plural, one {# day} other {# days}}"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "types": {
+      "hiking": "Hiking",
+      "camping": "Camping",
+      "bike_ride": "Bike ride"
+    },
+    "seasons": {
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "winter": "Winter"
     }
   },
   "packing": {

@@ -30,7 +30,7 @@ export const EditListPage = ({ list }: EditListPageProps) => {
         <Button asChild variant="ghost" className="cursor-pointer">
           <Link href={routes.profile}>
             <ArrowLeftIcon />
-            {t("backToProfile")}
+            {t("back")}
           </Link>
         </Button>
       </div>

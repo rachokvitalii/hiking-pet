@@ -6,7 +6,7 @@
     "delete": "Видалити",
     "edit": "Редагувати",
     "cancel": "Скасувати",
-    "backToProfile": "Назад до профілю"
+    "back": "Назад"
   },
   "toasts": {
     "accountCreated": "Акаунт успішно створено",
@@ -35,6 +35,37 @@
     "tripDurations": {
       "one_day": "Один день",
       "multy_day": "Кілька днів"
+    }
+  },
+  "routes": {
+    "labels": {
+      "distance": "Дистанція",
+      "duration": "Тривалість",
+      "elevationGain": "Набір висоти",
+      "region": "Регіон",
+      "seasons": "Найкращі сезони",
+      "tags": "Теги"
+    },
+    "units": {
+      "kilometers": "{value} км",
+      "meters": "{value} м",
+      "days": "{count, plural, one {# день} few {# дні} many {# днів} other {# дня}}"
+    },
+    "difficulty": {
+      "beginner": "Початковий",
+      "intermediate": "Середній",
+      "advanced": "Складний"
+    },
+    "types": {
+      "hiking": "Похід",
+      "camping": "Кемпінг",
+      "bike_ride": "Велопоїздка"
+    },
+    "seasons": {
+      "spring": "Весна",
+      "summer": "Літо",
+      "autumn": "Осінь",
+      "winter": "Зима"
     }
   },
   "packing": {
