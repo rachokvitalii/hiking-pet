@@ -21,6 +21,7 @@ type EditListPageProps = {
 };
 
 export const EditListPage = ({ list }: EditListPageProps) => {
+  const t = useTranslations("actions");
   const tListTypes = useTranslations("packing.listTypes");
 
   return (
@@ -29,7 +30,7 @@ export const EditListPage = ({ list }: EditListPageProps) => {
         <Button asChild variant="ghost" className="cursor-pointer">
           <Link href={routes.profile}>
             <ArrowLeftIcon />
-            Back to profile
+            {t("backToProfile")}
           </Link>
         </Button>
       </div>

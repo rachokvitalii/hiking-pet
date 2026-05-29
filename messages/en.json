@@ -1,4 +1,42 @@
 {
+  "actions": {
+    "view": "View",
+    "createNewList": "Create new list",
+    "create": "Create",
+    "delete": "Delete",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "backToProfile": "Back to profile"
+  },
+  "toasts": {
+    "accountCreated": "Account has been successfully created",
+    "passwordChanged": "Password has been successfully changed",
+    "profileSaved": "Profile data saved",
+    "createListFailed": "Failed to create list",
+    "deleteListSuccess": "List deleted successfully",
+    "deleteListFailed": "Failed to delete list",
+    "updateListSuccess": "List updated successfully",
+    "updateListFailed": "Failed to update list",
+    "updateItemFailed": "Failed to update item"
+  },
+  "profile": {
+    "title": "Profile",
+    "noProfileData": "No profile data, but you can create one <settingsLink>here</settingsLink>.",
+    "fallbackInitial": "U",
+    "avatarAlt": "Avatar",
+    "unnamedUser": "Unnamed user",
+    "homeRegionNotSet": "Home region not set",
+    "packingLists": "Packing lists:",
+    "tripPreferences": "Trip preferences",
+    "preferredTripDuration": "Preferred trip duration",
+    "maxDailyDistance": "Max daily distance",
+    "notSet": "Not set",
+    "dailyDistance": "{distance} km/day",
+    "tripDurations": {
+      "one_day": "One Day",
+      "multy_day": "Multi Day"
+    }
+  },
   "packing": {
     "categories": {
       "bivouac": "Bivouac",
@@ -96,6 +134,12 @@
       "hiking": "Hiking",
       "camping": "Camping",
       "bike_ride": "Bike ride"
+    },
+    "lists": {
+      "listName": "List name",
+      "empty": "No packing lists found.",
+      "created": "Created: {date}",
+      "typeOfJourney": "Type of journey"
     }
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { PencilIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -19,6 +20,7 @@ export const EditableListTitle = ({
   listId,
   initialTitle,
 }: EditableListTitleProps) => {
+  const tToasts = useTranslations("toasts");
   const [title, setTitle] = useState(initialTitle);
   const [draftTitle, setDraftTitle] = useState(initialTitle);
   const [isEditing, setIsEditing] = useState(false);
@@ -44,11 +46,11 @@ export const EditableListTitle = ({
       setDraftTitle(variables.title);
       setTitleError(null);
       setIsEditing(false);
-      toast.success("List updated successfully");
+      toast.success(tToasts("updateListSuccess"));
     },
     onError: () => {
-      setTitleError("Failed to update list");
-      toast.error("Failed to update list");
+      setTitleError(tToasts("updateListFailed"));
+      toast.error(tToasts("updateListFailed"));
     },
   });
 

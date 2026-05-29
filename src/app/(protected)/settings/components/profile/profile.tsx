@@ -9,6 +9,7 @@ import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
 import { api } from "~/trpc/react";
 import { EXPERIENCE_LEVEL_LABEL, EXPERIENCE_LEVELS, TRIP_DURATIONS_LABEL, TRIP_DURATIONS } from "~/types/types";
+import { useTranslations } from "next-intl";
 
 const selectClassName = "h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
 
@@ -21,6 +22,7 @@ const defaultValues: ProfileSchema = {
 }
 
 const Profile = () => {
+  const tToasts = useTranslations("toasts")
   const me = api.profile.me.useQuery()
 
   const form = useForm<ProfileSchema>({
@@ -40,7 +42,7 @@ const Profile = () => {
   const updateProfile = api.profile.updateProfile.useMutation({
     onSuccess: async () => {
       await utils.profile.me.invalidate()
-      toast.success("Profile data saved")
+      toast.success(tToasts("profileSaved"))
     }
   })
 

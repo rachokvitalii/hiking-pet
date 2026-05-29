@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { PlusIcon } from "lucide-react"
+import { Loader2Icon, PlusIcon } from "lucide-react"
 import { Button } from "~/components/ui/button"
 import {
   Dialog,
@@ -23,7 +23,10 @@ import { useTranslations } from "next-intl"
 
 export const CreateList = () => {
   const [open, setOpen] = useState(false)
+  const t = useTranslations("actions")
+  const tToasts = useTranslations("toasts")
   const tListTypes = useTranslations("packing.listTypes")
+  const tLists = useTranslations("packing.lists")
 
   const utils = api.useUtils()
 
@@ -42,7 +45,7 @@ export const CreateList = () => {
       form.reset()
     },
     onError: () => {
-      toast.error("Failed to create list")
+      toast.error(tToasts("createListFailed"))
     },
   })
 
@@ -57,14 +60,14 @@ export const CreateList = () => {
           className="cursor-pointer"
           onClick={() => setOpen(true)}
         >
-          Add new list <PlusIcon className="ml-2 h-4 w-4" />
+          {t("createNewList")} <PlusIcon className="ml-2 h-4 w-4" />
         </Button>
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Create new list</DialogTitle>
+            <DialogTitle>{t("createNewList")}</DialogTitle>
           </DialogHeader>
 
           <form
@@ -75,7 +78,7 @@ export const CreateList = () => {
             <FieldSet disabled={createList.isPending} className="flex flex-col gap-4">
               <Controller control={form.control} name="title" render={({ field, fieldState }) => (
                 <Field className="flex flex-col gap-2">
-                  <FieldLabel>List name</FieldLabel>
+                  <FieldLabel>{tLists("listName")}</FieldLabel>
                   <FieldContent>
                     <Input type="text" {...field} value={field.value ?? ""} />
                   </FieldContent>
@@ -87,7 +90,7 @@ export const CreateList = () => {
                 name="type"
                 render={({ field, fieldState }) => (
                   <Field className="flex flex-col gap-2">
-                    <FieldLabel>Type of journey</FieldLabel>
+                    <FieldLabel>{tLists("typeOfJourney")}</FieldLabel>
                     <FieldContent>
                       <RadioGroup
                         value={field.value}
@@ -119,7 +122,7 @@ export const CreateList = () => {
               onClick={() => setOpen(false)}
               disabled={createList.isPending}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               className="cursor-pointer"
@@ -127,7 +130,11 @@ export const CreateList = () => {
               form="create-list-form"
               disabled={createList.isPending}
             >
-              {createList.isPending ? "Creating..." : "Create"}
+              {createList.isPending ? (
+                <Loader2Icon className="h-4 w-4 animate-spin" />
+              ) : (
+                t("create")
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

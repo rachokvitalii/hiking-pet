@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Checkbox } from "~/components/ui/checkbox";
 import { api } from "~/trpc/react";
@@ -21,6 +22,7 @@ export const CatalogItemCheckbox = ({
   checked,
   disabled = false,
 }: CatalogItemCheckboxProps) => {
+  const tToasts = useTranslations("toasts");
   const utils = api.useUtils();
 
   const setCatalogItemIncluded =
@@ -70,7 +72,7 @@ export const CatalogItemCheckbox = ({
           { listId: variables.listId },
           context?.previousItems,
         );
-        toast.error("Failed to update item");
+        toast.error(tToasts("updateItemFailed"));
       },
       onSettled: async (_data, _error, variables) => {
         await utils.gearCatalog.getCheckedItems.invalidate({

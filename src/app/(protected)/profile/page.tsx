@@ -4,8 +4,9 @@ import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { api } from "~/trpc/server"
-import { TRIP_DURATIONS, TRIP_DURATIONS_LABEL, type TripDuration } from "~/types/types"
+import { TRIP_DURATIONS, type TripDuration } from "~/types/types"
 import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { routes } from "~/shared/routes"
 import { PackingList } from "~/features/packing-lists/components/packing-list"
 import { CreateList } from "~/features/packing-lists/components/create-list"
@@ -19,11 +20,11 @@ type UserProfile = {
   maxDailyKm: number | null
 }
 
-function initials(name?: string | null) {
+function initials(name: string | null | undefined, fallback: string) {
   const s = (name ?? "").trim()
-  if (!s) return "U"
+  if (!s) return fallback
   const parts = s.split(/\s+/).slice(0, 2)
-  return parts.map((p) => p[0]?.toUpperCase()).join("") || "U"
+  return parts.map((p) => p[0]?.toUpperCase()).join("") || fallback
 }
 
 function avatarUrlPlaceholder(_profile: UserProfile) {
@@ -33,28 +34,34 @@ function avatarUrlPlaceholder(_profile: UserProfile) {
 const isTripDuration = (value: string): value is TripDuration =>
   (TRIP_DURATIONS as readonly string[]).includes(value)
 
-const preferredTripDuration = (value: string | null) => {
-  if (!value) return "Not set"
-  return isTripDuration(value) ? TRIP_DURATIONS_LABEL[value] : value
-}
-
 const Profile: FC = async () => {
+  const tProfile = await getTranslations("profile")
   const profile = await api.profile.me()
 
   if (!profile) {
     return (
-      <main className="mx-auto w-full max-w-5xl px-6 py-10">
-        <Card>
-          <CardHeader>
-            <CardTitle>Profile</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            No profile data, but you can create one <Link href={routes.settings} className="text-blue-500">here.</Link>
-          </CardContent>
-        </Card>
-      </main>
+      <Card>
+        <CardHeader>
+          <CardTitle>{tProfile("title")}</CardTitle>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground">
+          {tProfile.rich("noProfileData", {
+            settingsLink: (chunks) => (
+              <Link href={routes.settings} className="text-blue-500">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </CardContent>
+      </Card>
     )
   }
+
+  const preferredTripDuration = profile.preferredTripDuration
+    ? isTripDuration(profile.preferredTripDuration)
+      ? tProfile(`tripDurations.${profile.preferredTripDuration}`)
+      : profile.preferredTripDuration
+    : tProfile("notSet")
 
   return (
     <div className="grid gap-3">
@@ -63,14 +70,16 @@ const Profile: FC = async () => {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
               <Avatar className="h-14 w-14">
-                <AvatarImage src={avatarUrlPlaceholder(profile)} alt="Avatar" />
-                <AvatarFallback>{initials(profile.displayName)}</AvatarFallback>
+                <AvatarImage src={avatarUrlPlaceholder(profile)} alt={tProfile("avatarAlt")} />
+                <AvatarFallback>
+                  {initials(profile.displayName, tProfile("fallbackInitial"))}
+                </AvatarFallback>
               </Avatar>
 
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="text-xl font-semibold leading-none">
-                    {profile.displayName ?? "Unnamed user"}
+                    {profile.displayName ?? tProfile("unnamedUser")}
                   </h1>
 
                   {profile.experienceLevel ? (
@@ -82,7 +91,7 @@ const Profile: FC = async () => {
                   {profile.homeRegion ? (
                     <span>{profile.homeRegion}</span>
                   ) : (
-                    <span>Home region not set</span>
+                    <span>{tProfile("homeRegionNotSet")}</span>
                   )}
                 </div>
               </div>
@@ -92,9 +101,9 @@ const Profile: FC = async () => {
       </Card>
 
       <div className="grid gap-3 lg:grid-cols-12">
-        <Card className="lg:col-span-9">
+        <Card className="lg:col-span-8">
           <CardHeader>
-            <CardTitle>Packing lists</CardTitle>
+            <CardTitle>{tProfile("packingLists")}</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-5">
@@ -102,24 +111,30 @@ const Profile: FC = async () => {
             <PackingList />
           </CardContent>
         </Card>
-        <Card className="lg:col-span-3">
+        <Card className="lg:col-span-4">
           <CardHeader>
-            <CardTitle>Trip preferences</CardTitle>
+            <CardTitle>{tProfile("tripPreferences")}</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-5">
             <div className="grid gap-4">
               <div className="space-y-1">
-                <div className="text-sm text-muted-foreground">Preferred trip duration</div>
+                <div className="text-sm text-muted-foreground">
+                  {tProfile("preferredTripDuration")}
+                </div>
                 <div className="text-sm font-medium">
-                  {preferredTripDuration(profile.preferredTripDuration)}
+                  {preferredTripDuration}
                 </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-sm text-muted-foreground">Max daily distance</div>
+                <div className="text-sm text-muted-foreground">
+                  {tProfile("maxDailyDistance")}
+                </div>
                 <div className="text-sm font-medium">
-                  {profile.maxDailyKm != null ? `${profile.maxDailyKm} km/day` : "Not set"}
+                  {profile.maxDailyKm != null
+                    ? tProfile("dailyDistance", { distance: profile.maxDailyKm })
+                    : tProfile("notSet")}
                 </div>
               </div>
             </div>

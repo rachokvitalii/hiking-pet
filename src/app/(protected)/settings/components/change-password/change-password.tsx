@@ -8,8 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "~/components/ui/button"
 import { toast } from "sonner"
 import { api } from "~/trpc/react"
+import { useTranslations } from "next-intl"
 
 const ChangePassword = () => {
+  const tToasts = useTranslations("toasts")
+
   const form = useForm<ChangePasswordInput>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -22,7 +25,7 @@ const ChangePassword = () => {
   const changePassword = api.profile.changePassword.useMutation({
     onSuccess: () => {
       form.reset()
-      toast.success("Password has been successfully changed")
+      toast.success(tToasts("passwordChanged"))
     },
     onError: (error) => {
       if (error.data?.code === "BAD_REQUEST") {

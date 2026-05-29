@@ -12,8 +12,11 @@ import { formErrorsSetter } from "~/lib/form-errors";
 import Link from "next/link";
 import { routes } from "~/shared/routes";
 import { toast } from "sonner"
+import { useTranslations } from "next-intl";
 
 const RegisterPage = () => {
+  const tToasts = useTranslations("toasts");
+
   const form = useForm<RegisterFormInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,7 +35,7 @@ const RegisterPage = () => {
       formErrorsSetter(res.issues, form.setError)
     } else {
       form.reset()
-      toast.success("Account has been successfully created", { position: 'top-center' })
+      toast.success(tToasts("accountCreated"), { position: 'top-center' })
     }
   }
 

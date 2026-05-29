@@ -1,4 +1,42 @@
 {
+  "actions": {
+    "view": "Переглянути",
+    "createNewList": "Створити новий список",
+    "create": "Створити",
+    "delete": "Видалити",
+    "edit": "Редагувати",
+    "cancel": "Скасувати",
+    "backToProfile": "Назад до профілю"
+  },
+  "toasts": {
+    "accountCreated": "Акаунт успішно створено",
+    "passwordChanged": "Пароль успішно змінено",
+    "profileSaved": "Дані профілю збережено",
+    "createListFailed": "Не вдалося створити список",
+    "deleteListSuccess": "Список успішно видалено",
+    "deleteListFailed": "Не вдалося видалити список",
+    "updateListSuccess": "Список успішно оновлено",
+    "updateListFailed": "Не вдалося оновити список",
+    "updateItemFailed": "Не вдалося оновити елемент"
+  },
+  "profile": {
+    "title": "Профіль",
+    "noProfileData": "Дані профілю відсутні, але їх можна створити <settingsLink>тут</settingsLink>.",
+    "fallbackInitial": "К",
+    "avatarAlt": "Аватар",
+    "unnamedUser": "Користувач без імені",
+    "homeRegionNotSet": "Домашній регіон не вказано",
+    "packingLists": "Списки спорядження:",
+    "tripPreferences": "Налаштування мандрівки",
+    "preferredTripDuration": "Бажана тривалість мандрівки",
+    "maxDailyDistance": "Максимальна денна дистанція",
+    "notSet": "Не вказано",
+    "dailyDistance": "{distance} км/день",
+    "tripDurations": {
+      "one_day": "Один день",
+      "multy_day": "Кілька днів"
+    }
+  },
   "packing": {
     "categories": {
       "bivouac": "Бівак",
@@ -96,6 +134,12 @@
       "hiking": "Похід",
       "camping": "Кемпінг",
       "bike_ride": "Велопоїздка"
+    },
+    "lists": {
+      "listName": "Назва списку",
+      "empty": "Списків спорядження не знайдено.",
+      "created": "Створено: {date}",
+      "typeOfJourney": "Тип мандрівки"
     }
   }
 }

@@ -14,12 +14,14 @@ type PackingListItemsProps = {
 };
 
 export const PackingListItems = ({ items }: PackingListItemsProps) => {
+  const t = useTranslations("actions");
+  const tLists = useTranslations("packing.lists");
   const tListTypes = useTranslations("packing.listTypes");
 
   if (items.length === 0) {
     return (
       <div className="text-muted-foreground mt-10 text-center">
-        No packing lists found.
+        {tLists("empty")}
       </div>
     );
   }
@@ -40,13 +42,15 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
 
           <CardContent className="flex items-center justify-between">
             <div className="text-muted-foreground text-xs">
-              Created: {new Date(item.createdAt).toLocaleDateString()}
+              {tLists("created", {
+                date: new Date(item.createdAt).toLocaleDateString(),
+              })}
             </div>
 
             <div className="flex gap-2">
               <Button asChild size="sm" variant="outline" className="cursor-pointer">
                 <Link href={routes.packingList(item.id)} prefetch>
-                  Edit
+                  {t("edit")}
                 </Link>
               </Button>
               <DeleteList id={item.id} />
