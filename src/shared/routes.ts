@@ -3,6 +3,7 @@ const staticRoutes = {
   settings: "/settings",
   login: "/login",
   register: "/register",
+  routes: "/routes",
 } as const;
 
 export function packingListRoute(id: number): `/packing-lists/${number}` {

@@ -3,7 +3,7 @@ import type { Route } from '~/types/types'
 export const routes: Route[] = [
   {
     "id": "hoverla-classic",
-    "title": "Hoverla Classic Route",
+    "title": "Класичний маршрут на Говерлу",
     "region": "Carpathians",
     "type": ["hiking"],
     "difficulty": "beginner",
@@ -12,11 +12,11 @@ export const routes: Route[] = [
     "elevationGain": 1200,
     "seasons": ["spring", "summer", "autumn"],
     "tags": ["mountains", "popular", "one-day"],
-    "description": "Classic one-day hike to the highest mountain in Ukraine."
+    "description": "Класичний одноденний похід на найвищу вершину України."
   },
   {
     "id": "pip-ivan-loop",
-    "title": "Pip Ivan Loop",
+    "title": "Кільцевий маршрут на Піп Іван",
     "region": "Carpathians",
     "type": ["hiking", "camping"],
     "difficulty": "intermediate",
@@ -25,11 +25,11 @@ export const routes: Route[] = [
     "elevationGain": 1800,
     "seasons": ["summer", "autumn"],
     "tags": ["mountains", "ridge", "multi-day"],
-    "description": "Two-day ridge hike with overnight camping near Pip Ivan."
+    "description": "Дводенний похід хребтом із ночівлею біля гори Піп Іван."
   },
   {
     "id": "synevyr-lakeside",
-    "title": "Synevyr Lakeside Trail",
+    "title": "Стежка навколо озера Синевир",
     "region": "Zakarpattia",
     "type": ["hiking"],
     "difficulty": "beginner",
@@ -38,11 +38,11 @@ export const routes: Route[] = [
     "elevationGain": 300,
     "seasons": ["spring", "summer", "autumn"],
     "tags": ["lake", "forest", "easy"],
-    "description": "Easy scenic trail around Synevyr lake and nearby forest."
+    "description": "Легка мальовнича прогулянка навколо озера Синевир та прилеглого лісу."
   },
   {
     "id": "gorgany-wild-camp",
-    "title": "Gorgany Wild Camp Traverse",
+    "title": "Дикий похід через Горгани",
     "region": "Carpathians",
     "type": ["hiking", "camping"],
     "difficulty": "advanced",
@@ -51,11 +51,11 @@ export const routes: Route[] = [
     "elevationGain": 3200,
     "seasons": ["summer"],
     "tags": ["remote", "wild", "camping"],
-    "description": "Remote multi-day traverse through the rocky Gorgany range."
+    "description": "Віддалений багатоденний маршрут через кам'янисті хребти Горган."
   },
   {
     "id": "bakota-canyon-walk",
-    "title": "Bakota Canyon Walk",
+    "title": "Прогулянка каньйоном Бакота",
     "region": "Khmelnytskyi",
     "type": ["hiking"],
     "difficulty": "beginner",
@@ -64,11 +64,11 @@ export const routes: Route[] = [
     "elevationGain": 250,
     "seasons": ["spring", "summer", "autumn"],
     "tags": ["canyon", "views", "easy"],
-    "description": "Relaxed hike with panoramic canyon and river views."
+    "description": "Спокійний маршрут із панорамними краєвидами на каньйон та річку."
   },
   {
     "id": "svydovets-ridge",
-    "title": "Svydovets Ridge Adventure",
+    "title": "Пригода на Свидовецькому хребті",
     "region": "Carpathians",
     "type": ["hiking", "camping"],
     "difficulty": "intermediate",
@@ -77,11 +77,11 @@ export const routes: Route[] = [
     "elevationGain": 2100,
     "seasons": ["summer", "autumn"],
     "tags": ["ridge", "lakes", "camping"],
-    "description": "Three-day route across alpine ridges and mountain lakes."
+    "description": "Триденний маршрут альпійськими хребтами та гірськими озерами."
   },
   {
     "id": "kyiv-forest-bike",
-    "title": "Kyiv Forest Bike Ride",
+    "title": "Лісовий веломаршрут біля Києва",
     "region": "Kyiv",
     "type": ["bike_ride"],
     "difficulty": "beginner",
@@ -90,11 +90,11 @@ export const routes: Route[] = [
     "elevationGain": 180,
     "seasons": ["spring", "summer", "autumn"],
     "tags": ["bike", "forest", "easy"],
-    "description": "Simple forest cycling route near Kyiv."
+    "description": "Простий велосипедний маршрут лісовими дорогами поблизу Києва."
   },
   {
     "id": "dnister-bike-camp",
-    "title": "Dnister Canyon Bikepacking",
+    "title": "Байкпакінг Дністровським каньйоном",
     "region": "Ternopil",
     "type": ["bike_ride", "camping"],
     "difficulty": "intermediate",
@@ -103,11 +103,11 @@ export const routes: Route[] = [
     "elevationGain": 950,
     "seasons": ["summer", "autumn"],
     "tags": ["bikepacking", "camping", "river"],
-    "description": "Bikepacking adventure with riverside camping."
+    "description": "Велоподорож із ночівлею в наметі вздовж берегів Дністра."
   },
   {
     "id": "chornohora-skyline",
-    "title": "Chornohora Skyline Traverse",
+    "title": "Перехід Чорногірським хребтом",
     "region": "Carpathians",
     "type": ["hiking", "camping"],
     "difficulty": "advanced",
@@ -116,11 +116,11 @@ export const routes: Route[] = [
     "elevationGain": 4100,
     "seasons": ["summer"],
     "tags": ["high-altitude", "ridge", "expedition"],
-    "description": "Long alpine traverse across the Chornohora ridge."
+    "description": "Тривалий високогірний маршрут уздовж Чорногірського хребта."
   },
   {
     "id": "lviv-weekend-hike",
-    "title": "Lviv Weekend Nature Hike",
+    "title": "Похід вихідного дня біля Львова",
     "region": "Lviv",
     "type": ["hiking"],
     "difficulty": "beginner",
@@ -129,6 +129,6 @@ export const routes: Route[] = [
     "elevationGain": 350,
     "seasons": ["spring", "summer", "autumn"],
     "tags": ["weekend", "forest", "family"],
-    "description": "Short and beginner-friendly weekend hike near Lviv."
+    "description": "Короткий маршрут для початківців неподалік Львова."
   }
 ]
