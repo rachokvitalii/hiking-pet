@@ -37,6 +37,8 @@ export type Route = {
   region: string;
   type: TripType[];
   difficulty: ExperienceLevel;
+  latitude: number;
+  longitude: number;
   distanceKm: number;
   days: number;
   elevationGain: number;

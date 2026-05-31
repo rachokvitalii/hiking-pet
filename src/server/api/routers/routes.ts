@@ -66,6 +66,8 @@ export const routesRouter = createTRPCRouter({
           region: routes.region,
           type: routes.type,
           difficulty: routes.difficulty,
+          latitude: routes.latitude,
+          longitude: routes.longitude,
           distanceKm: routes.distanceKm,
           days: routes.days,
           elevationGain: routes.elevationGain,

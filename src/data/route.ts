@@ -6,6 +6,8 @@ type RouteSeed = {
   region: string;
   type: TripType[];
   difficulty: ExperienceLevel;
+  latitude: number;
+  longitude: number;
   distanceKm: number;
   days: number;
   elevationGain: number;
@@ -20,6 +22,8 @@ export const routes: RouteSeed[] = [
     region: "Carpathians",
     type: ["hiking"],
     difficulty: "beginner",
+    latitude: 48.1608,
+    longitude: 24.5003,
     distanceKm: 14,
     days: 1,
     elevationGain: 1200,
@@ -32,6 +36,8 @@ export const routes: RouteSeed[] = [
     region: "Carpathians",
     type: ["hiking", "camping"],
     difficulty: "intermediate",
+    latitude: 48.0475,
+    longitude: 24.6272,
     distanceKm: 32,
     days: 2,
     elevationGain: 1800,
@@ -44,6 +50,8 @@ export const routes: RouteSeed[] = [
     region: "Zakarpattia",
     type: ["hiking"],
     difficulty: "beginner",
+    latitude: 48.6167,
+    longitude: 23.6833,
     distanceKm: 8,
     days: 1,
     elevationGain: 300,
@@ -57,6 +65,8 @@ export const routes: RouteSeed[] = [
     region: "Carpathians",
     type: ["hiking", "camping"],
     difficulty: "advanced",
+    latitude: 48.4596,
+    longitude: 24.1052,
     distanceKm: 58,
     days: 3,
     elevationGain: 3200,
@@ -70,6 +80,8 @@ export const routes: RouteSeed[] = [
     region: "Khmelnytskyi",
     type: ["hiking"],
     difficulty: "beginner",
+    latitude: 48.585,
+    longitude: 26.9989,
     distanceKm: 10,
     days: 1,
     elevationGain: 250,
@@ -83,6 +95,8 @@ export const routes: RouteSeed[] = [
     region: "Carpathians",
     type: ["hiking", "camping"],
     difficulty: "intermediate",
+    latitude: 48.2353,
+    longitude: 24.2442,
     distanceKm: 42,
     days: 3,
     elevationGain: 2100,
@@ -96,6 +110,8 @@ export const routes: RouteSeed[] = [
     region: "Kyiv",
     type: ["bike_ride"],
     difficulty: "beginner",
+    latitude: 50.4477,
+    longitude: 30.2283,
     distanceKm: 24,
     days: 1,
     elevationGain: 180,
@@ -109,6 +125,8 @@ export const routes: RouteSeed[] = [
     region: "Ternopil",
     type: ["bike_ride", "camping"],
     difficulty: "intermediate",
+    latitude: 48.6739,
+    longitude: 25.7369,
     distanceKm: 85,
     days: 2,
     elevationGain: 950,
@@ -121,6 +139,8 @@ export const routes: RouteSeed[] = [
     region: "Carpathians",
     type: ["hiking", "camping"],
     difficulty: "advanced",
+    latitude: 48.1203,
+    longitude: 24.5475,
     distanceKm: 74,
     days: 4,
     elevationGain: 4100,
@@ -133,6 +153,8 @@ export const routes: RouteSeed[] = [
     region: "Lviv",
     type: ["hiking"],
     difficulty: "beginner",
+    latitude: 49.7956,
+    longitude: 24.0636,
     distanceKm: 12,
     days: 1,
     elevationGain: 350,
