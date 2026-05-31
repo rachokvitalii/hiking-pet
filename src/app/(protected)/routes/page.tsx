@@ -11,14 +11,29 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { GetRecommendation } from "~/features/routes/components/get-recommendation";
+import { getRecommendationId } from "~/features/routes/utils/get-recommendation-id";
+import { ButtonBack } from "~/components/button-back";
+import { routes as staticRoutes } from "~/shared/routes";
 
-export default async function RoutesPage() {
+export default async function RoutesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ recommendation?: string }>;
+}) {
   const t = await getTranslations("actions");
   const tRoute = await getTranslations("routes");
-  const routes = await api.routes.getAll();
+  const recommendationId = await getRecommendationId(searchParams);
+
+  const routes = recommendationId
+    ? await api.routes.getRecommendation({ recommendationId })
+    : await api.routes.getAll();
 
   return (
     <>
+      {recommendationId ? (
+        <ButtonBack href={staticRoutes.routes} text={t("backToRoutes")} />
+      ) : <GetRecommendation />}
       <div className="grid gap-4 lg:grid-cols-3">
         {routes.map((route) => (
           <Card key={route.id}>
@@ -41,10 +56,23 @@ export default async function RoutesPage() {
                   </Badge>
                 ))}
               </div>
+              {route.recommendation?.reason && (
+                <div className="bg-muted/30 rounded-md border px-3 py-2 text-sm">
+                  {route.recommendation.reason}
+                </div>
+              )}
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button>
-                <Link href={`/routes/${route.id}`}>{t("view")}</Link>
+              <Button asChild>
+                <Link
+                  href={
+                    recommendationId
+                      ? `${staticRoutes.routes}/${route.id}?recommendation=${recommendationId}`
+                      : `${staticRoutes.routes}/${route.id}`
+                  }
+                >
+                  {t("view")}
+                </Link>
               </Button>
             </CardFooter>
           </Card>

@@ -16,7 +16,7 @@ for (const path of envFiles) {
 }
 
 const routesSeed = routeSeeds.map((route) => ({
-  slug: route.id,
+  slug: route.slug,
   title: route.title,
   description: route.description,
   region: route.region,

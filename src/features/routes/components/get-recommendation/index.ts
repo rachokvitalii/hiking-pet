@@ -1,0 +1,1 @@
+export { GetRecommendation } from "./get-recommendation";

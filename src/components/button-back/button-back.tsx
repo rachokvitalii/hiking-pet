@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Button } from "../ui/button"
 import { useTranslations } from "next-intl"
 
-export const ButtonBack = ({ href }: { href: string }) => {
+export const ButtonBack = ({ href, text }: { href: string, text?: string }) => {
   const tActions = useTranslations("actions")
 
   return (
@@ -11,7 +11,7 @@ export const ButtonBack = ({ href }: { href: string }) => {
       <Button asChild variant="outline" className="cursor-pointer">
         <Link href={href}>
           <ArrowLeftIcon />
-          {tActions("back")}
+          {text ?? tActions("back")}
         </Link>
       </Button>
     </div>

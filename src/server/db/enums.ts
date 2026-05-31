@@ -32,3 +32,9 @@ export const seasonEnum = pgEnum("season", [
   "autumn",
   "winter",
 ]);
+
+export const recommendationStatusEnum = pgEnum("recommendation_status", [
+  "pending",
+  "completed",
+  "failed",
+]);

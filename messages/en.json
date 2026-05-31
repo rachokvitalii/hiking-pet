@@ -7,6 +7,7 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "back": "Back",
+    "backToRoutes": "Back to routes",
     "getAiRecommendation": "Get AI recommendation"
   },
   "toasts": {
