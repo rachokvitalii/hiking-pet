@@ -119,19 +119,19 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
  * @see https://trpc.io/docs/procedures
  */
 
-  export const protectedProcedure = t.procedure
+export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(({ ctx, next }) => {
-    const userId = ctx.session?.user?.id
-  
+    const userId = ctx.session?.user?.id;
+
     if (!userId) {
-      throw new TRPCError({ code: "UNAUTHORIZED" })
+      throw new TRPCError({ code: "UNAUTHORIZED" });
     }
-  
+
     return next({
       ctx: {
         ...ctx,
-        userId
-      }
-    })
-  })
+        userId,
+      },
+    });
+  });

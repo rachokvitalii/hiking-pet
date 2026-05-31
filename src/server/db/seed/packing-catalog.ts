@@ -144,7 +144,9 @@ async function seedGearCategories() {
 
 async function seedGearCatalogItems() {
   const { db } = await import("~/server/db");
-  const categoryKeys = Array.from(new Set(catalogItemsSeed.map((item) => item.categoryKey)));
+  const categoryKeys = Array.from(
+    new Set(catalogItemsSeed.map((item) => item.categoryKey)),
+  );
   const categoryRows = await db
     .select({
       id: gearCategories.id,
@@ -152,13 +154,17 @@ async function seedGearCatalogItems() {
     })
     .from(gearCategories)
     .where(inArray(gearCategories.key, categoryKeys));
-  const categoryIdByKey = new Map(categoryRows.map((category) => [category.key, category.id]));
+  const categoryIdByKey = new Map(
+    categoryRows.map((category) => [category.key, category.id]),
+  );
 
   const values = catalogItemsSeed.map((item) => {
     const categoryId = categoryIdByKey.get(item.categoryKey);
 
     if (!categoryId) {
-      throw new Error(`Gear category not found for catalog item: ${item.categoryKey}/${item.key}`);
+      throw new Error(
+        `Gear category not found for catalog item: ${item.categoryKey}/${item.key}`,
+      );
     }
 
     return {
@@ -175,12 +181,17 @@ async function seedGearCatalogItems() {
       key: gearCatalogItems.key,
     })
     .from(gearCatalogItems)
-    .where(inArray(gearCatalogItems.categoryId, categoryRows.map((category) => category.id)));
+    .where(
+      inArray(
+        gearCatalogItems.categoryId,
+        categoryRows.map((category) => category.id),
+      ),
+    );
   const existingItemKeys = new Set(
-    existingItems.map((item) => `${item.categoryId}:${item.key}`)
+    existingItems.map((item) => `${item.categoryId}:${item.key}`),
   );
   const newValues = values.filter(
-    (item) => !existingItemKeys.has(`${item.categoryId}:${item.key}`)
+    (item) => !existingItemKeys.has(`${item.categoryId}:${item.key}`),
   );
 
   if (newValues.length > 0) {

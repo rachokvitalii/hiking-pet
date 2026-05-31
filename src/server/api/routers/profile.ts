@@ -9,16 +9,19 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const profileRouter = createTRPCRouter({
   me: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.userId
+    const userId = ctx.userId;
 
-    const [row] = await db.select().from(userProfile).where(eq(userProfile.userId, Number(userId)))
+    const [row] = await db
+      .select()
+      .from(userProfile)
+      .where(eq(userProfile.userId, Number(userId)));
 
-    return row ?? null
+    return row ?? null;
   }),
   updateProfile: protectedProcedure
     .input(profileSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.userId
+      const userId = ctx.userId;
 
       const updatedData = {
         displayName: input.displayName ?? null,
@@ -26,41 +29,53 @@ export const profileRouter = createTRPCRouter({
         experienceLevel: input.experienceLevel ?? null,
         preferredTripDuration: input.preferredTripDuration ?? null,
         maxDailyKm: input.maxDailyKm ?? null,
-      }
+      };
 
       const updated = await db
         .update(userProfile)
         .set(updatedData)
         .where(eq(userProfile.userId, Number(userId)))
-        .returning()
+        .returning();
 
-      if (updated.length) return updated[0]
+      if (updated.length) return updated[0];
 
       const inserted = await db
         .insert(userProfile)
         .values({ userId: Number(userId), ...updatedData })
-        .returning()
+        .returning();
 
-      return inserted[0]
+      return inserted[0];
     }),
 
   changePassword: protectedProcedure
     .input(changePasswordSchema)
     .mutation(async ({ ctx, input }) => {
-      const [user] = await db.select().from(users).where(eq(users.id, Number(ctx.userId)))
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, Number(ctx.userId)));
 
       if (!user) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
       }
 
-      const passwordMatch = await compare(input.currentPassword, user.password!)
+      const passwordMatch = await compare(
+        input.currentPassword,
+        user.password!,
+      );
 
       if (!passwordMatch) {
-        throw new TRPCError({ code: "BAD_REQUEST", message: "Current password is incorrect" })
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Current password is incorrect",
+        });
       }
 
-      const hashedPassword = await hash(input.password, 10)
+      const hashedPassword = await hash(input.password, 10);
 
-      await db.update(users).set({ password: hashedPassword }).where(eq(users.id, Number(ctx.userId)))
+      await db
+        .update(users)
+        .set({ password: hashedPassword })
+        .where(eq(users.id, Number(ctx.userId)));
     }),
-})
+});

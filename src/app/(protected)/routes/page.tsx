@@ -33,7 +33,9 @@ export default async function RoutesPage({
     <>
       {recommendationId ? (
         <ButtonBack href={staticRoutes.routes} text={t("backToRoutes")} />
-      ) : <GetRecommendation />}
+      ) : (
+        <GetRecommendation />
+      )}
       <div className="grid gap-4 lg:grid-cols-3">
         {routes.map((route) => (
           <Card key={route.id}>

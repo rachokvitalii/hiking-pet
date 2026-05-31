@@ -1,24 +1,24 @@
-'use client'
+"use client";
 
-import Link from "next/link"
-import { DropdownMenuItem } from "~/components/ui/dropdown-menu"
-import { usePathname } from "next/navigation"
+import Link from "next/link";
+import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
+import { usePathname } from "next/navigation";
 
 type MenuItemLinkProps = {
-  href: string
-  children: React.ReactNode
-}
+  href: string;
+  children: React.ReactNode;
+};
 
 export const MenuItem = ({ href, children }: MenuItemLinkProps) => {
-  const pathname = usePathname()
-  const isActive = pathname === href
+  const pathname = usePathname();
+  const isActive = pathname === href;
 
   if (isActive) {
     return (
-      <DropdownMenuItem className="font-bold cursor-default">
+      <DropdownMenuItem className="cursor-default font-bold">
         {children}
       </DropdownMenuItem>
-    )
+    );
   }
 
   return (
@@ -27,5 +27,5 @@ export const MenuItem = ({ href, children }: MenuItemLinkProps) => {
         {children}
       </Link>
     </DropdownMenuItem>
-  )
-}
+  );
+};

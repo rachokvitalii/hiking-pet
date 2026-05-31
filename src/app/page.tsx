@@ -10,10 +10,10 @@ export default async function Home() {
 
   // it is temporary
   if (!session) {
-    redirect(routes.login)
+    redirect(routes.login);
   }
 
-  redirect(routes.profile)
+  redirect(routes.profile);
 
   return (
     <HydrateClient>

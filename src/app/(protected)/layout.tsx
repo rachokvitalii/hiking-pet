@@ -5,25 +5,23 @@ import { routes } from "~/shared/routes";
 import { redirect } from "next/navigation";
 import { Container } from "~/components/container";
 
-export default async function LoggedInLayout ({
-  children
+export default async function LoggedInLayout({
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user?.id) {
-    redirect(routes.login)
+    redirect(routes.login);
   }
 
   return (
     <>
       <Header />
       <Container className="pt-10">
-        <main className="mx-auto w-full max-w-5xl px-6 pb-10">
-          {children}
-        </main>
+        <main className="mx-auto w-full max-w-5xl px-6 pb-10">{children}</main>
       </Container>
     </>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { ArrowLeftIcon } from "lucide-react"
-import Link from "next/link"
-import { Button } from "../ui/button"
-import { useTranslations } from "next-intl"
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
-export const ButtonBack = ({ href, text }: { href: string, text?: string }) => {
-  const tActions = useTranslations("actions")
+export const ButtonBack = ({ href, text }: { href: string; text?: string }) => {
+  const tActions = useTranslations("actions");
 
   return (
     <div className="mb-4">
@@ -15,5 +15,5 @@ export const ButtonBack = ({ href, text }: { href: string, text?: string }) => {
         </Link>
       </Button>
     </div>
-  )
-}
+  );
+};

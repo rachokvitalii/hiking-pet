@@ -1,1 +1,1 @@
-export { DeleteList } from "./delete-list"
+export { DeleteList } from "./delete-list";

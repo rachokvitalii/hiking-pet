@@ -1,4 +1,13 @@
-import { pgTable, serial, text, timestamp, varchar, index, uniqueIndex, integer } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+  index,
+  uniqueIndex,
+  integer,
+} from "drizzle-orm/pg-core";
 import { users } from "./users-schema";
 import { tripTypeEnum } from "./enums";
 import { experienceLevelEnum } from "./enums";

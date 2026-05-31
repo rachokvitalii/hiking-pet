@@ -1,7 +1,7 @@
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { eq } from "drizzle-orm"
-import { compare } from "bcrypt"
+import { eq } from "drizzle-orm";
+import { compare } from "bcrypt";
 
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
@@ -29,15 +29,15 @@ export const authConfig = {
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
-        token.id = user.id
+        token.id = user.id;
       }
 
-      return token
+      return token;
     },
     session: ({ session, token }) => {
-      session.user.id = token.id as string
+      session.user.id = token.id as string;
 
-      return session
+      return session;
     },
   },
   providers: [
@@ -48,24 +48,30 @@ export const authConfig = {
       },
       authorize: async (credentials) => {
         try {
-          const [user] = await db.select().from(users).where(eq(users.email, credentials.email as string))
-    
+          const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, credentials.email as string));
+
           if (!user?.password) {
-            return null
+            return null;
           }
-          
-          const isPasswordCorrect = await compare(credentials.password as string, user.password)
-    
+
+          const isPasswordCorrect = await compare(
+            credentials.password as string,
+            user.password,
+          );
+
           if (!isPasswordCorrect) {
-            return null
+            return null;
           }
-    
+
           return {
             id: user.id.toString(),
-            email: user.email
-          }
+            email: user.email,
+          };
         } catch {
-          throw new Error("Auth failed")
+          throw new Error("Auth failed");
         }
       },
     }),

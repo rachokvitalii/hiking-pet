@@ -29,7 +29,7 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
   return (
     <div className="space-y-6">
       {items.map((item) => (
-        <Card key={item.id} className="relative hover:bg-muted/30 transition">
+        <Card key={item.id} className="hover:bg-muted/30 relative transition">
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle className="text-base">{item.title}</CardTitle>
             <Badge
@@ -48,7 +48,12 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
             </div>
 
             <div className="flex gap-2">
-              <Button asChild size="sm" variant="outline" className="cursor-pointer">
+              <Button
+                asChild
+                size="sm"
+                variant="outline"
+                className="cursor-pointer"
+              >
                 <Link href={routes.packingList(item.id)} prefetch>
                   {t("edit")}
                 </Link>

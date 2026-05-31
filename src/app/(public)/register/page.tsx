@@ -3,7 +3,13 @@
 import { FormWrapper } from "~/components/form-wrapper/form-wrapper";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Field, FieldContent, FieldError, FieldLabel, FieldSet } from "~/components/ui/field";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+  FieldSet,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { registerAction } from "./actions";
@@ -11,7 +17,7 @@ import { type RegisterFormInput, formSchema } from "./validation";
 import { formErrorsSetter } from "~/lib/form-errors";
 import Link from "next/link";
 import { routes } from "~/shared/routes";
-import { toast } from "sonner"
+import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
 const RegisterPage = () => {
@@ -26,50 +32,71 @@ const RegisterPage = () => {
     },
   });
 
-  const onSubmit =  async (data: RegisterFormInput) => {
-    form.clearErrors('root')
+  const onSubmit = async (data: RegisterFormInput) => {
+    form.clearErrors("root");
 
-    const res = await registerAction(data)
+    const res = await registerAction(data);
 
     if (!res?.ok) {
-      formErrorsSetter(res.issues, form.setError)
+      formErrorsSetter(res.issues, form.setError);
     } else {
-      form.reset()
-      toast.success(tToasts("accountCreated"), { position: 'top-center' })
+      form.reset();
+      toast.success(tToasts("accountCreated"), { position: "top-center" });
     }
-  }
+  };
 
   return (
     <FormWrapper title="Register">
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FieldSet disabled={form.formState.isSubmitting} className="flex flex-col gap-4">
-          <Controller control={form.control} name="email" render={({ field, fieldState }) => (
-            <Field className="flex flex-col gap-2">
-              <FieldLabel>Email</FieldLabel>
-              <FieldContent>
-                <Input {...field} />
-              </FieldContent>
-              {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
-            </Field>
-          )} />
-          <Controller control={form.control} name="password" render={({ field, fieldState }) => (
-            <Field className="flex flex-col gap-2">
-              <FieldLabel>Password</FieldLabel>
-              <FieldContent>
-                <Input type="password" {...field} />
-              </FieldContent>
-              {fieldState.invalid && <FieldError >{fieldState.error?.message}</FieldError>}
-            </Field>
-          )} />
-          <Controller control={form.control} name="passwordConfirm" render={({ field, fieldState }) => (
-            <Field className="flex flex-col gap-2">
-              <FieldLabel>Password Confirm</FieldLabel>
-              <FieldContent>
-                <Input type="password" {...field} />
-              </FieldContent>
-              {fieldState.invalid && <FieldError>{fieldState.error?.message}</FieldError>}
-            </Field>
-          )} />
+        <FieldSet
+          disabled={form.formState.isSubmitting}
+          className="flex flex-col gap-4"
+        >
+          <Controller
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <Field className="flex flex-col gap-2">
+                <FieldLabel>Email</FieldLabel>
+                <FieldContent>
+                  <Input {...field} />
+                </FieldContent>
+                {fieldState.invalid && (
+                  <FieldError>{fieldState.error?.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="password"
+            render={({ field, fieldState }) => (
+              <Field className="flex flex-col gap-2">
+                <FieldLabel>Password</FieldLabel>
+                <FieldContent>
+                  <Input type="password" {...field} />
+                </FieldContent>
+                {fieldState.invalid && (
+                  <FieldError>{fieldState.error?.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="passwordConfirm"
+            render={({ field, fieldState }) => (
+              <Field className="flex flex-col gap-2">
+                <FieldLabel>Password Confirm</FieldLabel>
+                <FieldContent>
+                  <Input type="password" {...field} />
+                </FieldContent>
+                {fieldState.invalid && (
+                  <FieldError>{fieldState.error?.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
           {form.formState.errors.root?.message && (
             <FieldError>{form.formState.errors.root?.message}</FieldError>
           )}
@@ -82,10 +109,12 @@ const RegisterPage = () => {
       </form>
       <div className="mt-5 text-center text-xs">
         Already have an account?{` `}
-        <Link className="underline" href={routes.login}>Login</Link>
+        <Link className="underline" href={routes.login}>
+          Login
+        </Link>
       </div>
     </FormWrapper>
-  )
+  );
 };
 
 export default RegisterPage;

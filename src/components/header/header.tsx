@@ -6,14 +6,17 @@ import { routes } from "~/shared/routes";
 
 export const Header = () => {
   return (
-    <header className="border-b bg-background">
-      <Container className="flex items-center justify-between h-16">
+    <header className="bg-background border-b">
+      <Container className="flex h-16 items-center justify-between">
         <Logo />
-        <Link className="cursor-pointer text-sm font-medium hover:underline" href={routes.routes}>
+        <Link
+          className="cursor-pointer text-sm font-medium hover:underline"
+          href={routes.routes}
+        >
           Routes
         </Link>
         <Menu />
       </Container>
     </header>
-  )
-}
+  );
+};

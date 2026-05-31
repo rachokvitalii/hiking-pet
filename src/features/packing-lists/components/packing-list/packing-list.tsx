@@ -40,7 +40,5 @@ export const PackingList = () => {
     );
   }
 
-  return (
-    <PackingListItems items={packingLists ?? []} />
-  );
+  return <PackingListItems items={packingLists ?? []} />;
 };

@@ -8,7 +8,11 @@ import {
   packingListItems,
   packingLists,
 } from "./packing-schema";
-import { routeRecommendations, routeRecommendationItems, routes } from "./routes-schema";
+import {
+  routeRecommendations,
+  routeRecommendationItems,
+  routes,
+} from "./routes-schema";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(userProfile, {

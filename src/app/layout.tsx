@@ -5,7 +5,7 @@ import { Geist } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { Toaster } from "~/components/ui/sonner"
+import { Toaster } from "~/components/ui/sonner";
 import { defaultLocale } from "~/i18n/request";
 
 export const metadata: Metadata = {
@@ -32,10 +32,10 @@ export default function RootLayout({
           toastOptions={{
             duration: 6000,
             classNames: {
-              toast: '!bg-neutral-950',
-              title: '!text-white',
-              icon: '!text-white'
-            }
+              toast: "!bg-neutral-950",
+              title: "!text-white",
+              icon: "!text-white",
+            },
           }}
         />
       </body>
