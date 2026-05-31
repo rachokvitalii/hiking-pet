@@ -1,3 +1,4 @@
+
 import {
   CalendarDaysIcon,
   MapPinIcon,
@@ -16,10 +17,10 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { routes } from "~/data/route";
 import { routes as staticRoutes } from "~/shared/routes";
-import type { Route } from "~/types/types";
 import { ButtonBack } from "~/components/button-back";
+import { api } from "~/trpc/server";
+import type { TripType } from "~/types/types";
 
 export default async function RoutePage({
   params,
@@ -27,7 +28,8 @@ export default async function RoutePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const route = routes.find((route: Route) => route.id === id);
+
+  const route = await api.routes.getById({ id: Number(id) });
 
   const tRoute = await getTranslations("routes");
 
@@ -68,7 +70,7 @@ export default async function RoutePage({
             <Badge variant="secondary">
               {tRoute(`difficulty.${route.difficulty}`)}
             </Badge>
-            {route.type.map((type) => (
+            {route.type.map((type: TripType) => (
               <Badge key={type} variant="outline">
                 {tRoute(`types.${type}`)}
               </Badge>
@@ -123,17 +125,6 @@ export default async function RoutePage({
                 {route.seasons.map((season) => (
                   <Badge key={season} variant="secondary">
                     {tRoute(`seasons.${season}`)}
-                  </Badge>
-                ))}
-              </div>
-            </section>
-
-            <section className="space-y-3">
-              <div className="text-sm font-medium">{tRoute("labels.tags")}</div>
-              <div className="flex flex-wrap gap-2">
-                {route.tags.map((tag) => (
-                  <Badge key={tag} variant="outline">
-                    #{tag}
                   </Badge>
                 ))}
               </div>

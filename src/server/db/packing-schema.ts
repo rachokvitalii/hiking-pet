@@ -1,7 +1,6 @@
 import {
   boolean,
   integer,
-  pgEnum,
   pgTable,
   serial,
   text,
@@ -9,115 +8,101 @@ import {
   varchar,
   index,
   uniqueIndex,
-} from 'drizzle-orm/pg-core'
-import { users } from './users-schema'
-
-export const tripTypeEnum = pgEnum('trip_type', [
-  'hiking',
-  'camping',
-  'bike_ride',
-])
-
-export const gearCategoryEnum = pgEnum('gear_category', [
-  'bivouac',
-  'kitchen',
-  'hygiene',
-  'gear',
-  'navigation',
-  'electronics',
-  'documents_money',
-  'other',
-  'clothing_footwear',
-  'first_aid',
-  'food',
-])
+} from "drizzle-orm/pg-core";
+import { users } from "./users-schema";
+import { tripTypeEnum } from "./enums";
+import { gearCategoryEnum } from "./enums";
 
 export const packingLists = pgTable(
-  'packing_lists',
+  "packing_lists",
   {
-    id: serial('id').primaryKey(),
+    id: serial("id").primaryKey(),
 
-    userId: integer('user_id')
+    userId: integer("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+      .references(() => users.id, { onDelete: "cascade" }),
 
-    title: varchar('title', { length: 128 }).notNull(),
+    title: varchar("title", { length: 128 }).notNull(),
 
-    type: tripTypeEnum('type').notNull(),
+    type: tripTypeEnum("type").notNull(),
 
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
-  (table) => [
-    index('packing_lists_user_id_idx').on(table.userId),
-  ]
-)
+  (table) => [index("packing_lists_user_id_idx").on(table.userId)],
+);
 
-export const gearCategories = pgTable('gear_categories', {
-  id: serial('id').primaryKey(),
+export const gearCategories = pgTable("gear_categories", {
+  id: serial("id").primaryKey(),
 
-  key: gearCategoryEnum('key').notNull().unique(),
+  key: gearCategoryEnum("key").notNull().unique(),
 
-  sortOrder: integer('sort_order').notNull(),
-})
+  sortOrder: integer("sort_order").notNull(),
+});
 
 export const gearCatalogItems = pgTable(
-  'gear_catalog_items',
+  "gear_catalog_items",
   {
-    id: serial('id').primaryKey(),
+    id: serial("id").primaryKey(),
 
-    categoryId: integer('category_id')
+    categoryId: integer("category_id")
       .notNull()
-      .references(() => gearCategories.id, { onDelete: 'cascade' }),
+      .references(() => gearCategories.id, { onDelete: "cascade" }),
 
-    key: varchar('key', { length: 128 }).notNull(),
+    key: varchar("key", { length: 128 }).notNull(),
 
-    sortOrder: integer('sort_order').notNull(),
+    sortOrder: integer("sort_order").notNull(),
 
-    isDefault: boolean('is_default').default(true).notNull(),
+    isDefault: boolean("is_default").default(true).notNull(),
   },
   (table) => [
-    index('gear_catalog_items_category_id_idx').on(table.categoryId),
-    uniqueIndex('gear_catalog_items_category_key_unique').on(table.categoryId, table.key),
-  ]
-)
+    index("gear_catalog_items_category_id_idx").on(table.categoryId),
+    uniqueIndex("gear_catalog_items_category_key_unique").on(
+      table.categoryId,
+      table.key,
+    ),
+  ],
+);
 
 export const packingListItems = pgTable(
-  'packing_list_items',
+  "packing_list_items",
   {
-    id: serial('id').primaryKey(),
+    id: serial("id").primaryKey(),
 
-    packingListId: integer('packing_list_id')
+    packingListId: integer("packing_list_id")
       .notNull()
-      .references(() => packingLists.id, { onDelete: 'cascade' }),
+      .references(() => packingLists.id, { onDelete: "cascade" }),
 
-    categoryId: integer('category_id')
+    categoryId: integer("category_id")
       .notNull()
-      .references(() => gearCategories.id, { onDelete: 'restrict' }),
+      .references(() => gearCategories.id, { onDelete: "restrict" }),
 
-    catalogItemId: integer('catalog_item_id').references(() => gearCatalogItems.id, {
-      onDelete: 'set null',
-    }),
+    catalogItemId: integer("catalog_item_id").references(
+      () => gearCatalogItems.id,
+      {
+        onDelete: "set null",
+      },
+    ),
 
-    name: varchar('name', { length: 128 }).notNull(),
+    name: varchar("name", { length: 128 }).notNull(),
 
-    isChecked: boolean('is_checked').default(false).notNull(),
+    isChecked: boolean("is_checked").default(false).notNull(),
 
-    quantity: integer('quantity').default(1).notNull(),
+    quantity: integer("quantity").default(1).notNull(),
 
-    note: text('note'),
+    note: text("note"),
 
-    sortOrder: integer('sort_order').notNull(),
+    sortOrder: integer("sort_order").notNull(),
 
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => [
-    index('packing_list_items_list_id_idx').on(table.packingListId),
-    index('packing_list_items_category_id_idx').on(table.categoryId),
-    uniqueIndex('packing_list_items_list_catalog_unique').on(
+    index("packing_list_items_list_id_idx").on(table.packingListId),
+    index("packing_list_items_category_id_idx").on(table.categoryId),
+    uniqueIndex("packing_list_items_list_catalog_unique").on(
       table.packingListId,
       table.catalogItemId,
     ),
-  ]
-)
+  ],
+);

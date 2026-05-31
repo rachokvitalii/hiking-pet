@@ -57,6 +57,13 @@
       "when": 1779979384955,
       "tag": "0007_fantastic_mongu",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1780175237198,
+      "tag": "0008_outgoing_starhawk",
+      "breakpoints": true
     }
   ]
 }

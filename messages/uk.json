@@ -6,7 +6,8 @@
     "delete": "Видалити",
     "edit": "Редагувати",
     "cancel": "Скасувати",
-    "back": "Назад"
+    "back": "Назад",
+    "getAiRecommendation": "Отримати рекомендацію від AI"
   },
   "toasts": {
     "accountCreated": "Акаунт успішно створено",
@@ -43,8 +44,7 @@
       "duration": "Тривалість",
       "elevationGain": "Набір висоти",
       "region": "Регіон",
-      "seasons": "Найкращі сезони",
-      "tags": "Теги"
+      "seasons": "Найкращі сезони"
     },
     "units": {
       "kilometers": "{value} км",

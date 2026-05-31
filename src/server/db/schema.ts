@@ -1,5 +1,13 @@
-export { users } from "./users-schema";
-export { userProfile } from "./user-profile-schema";
+export {
+  gearCategoryEnum,
+  experienceLevelEnum,
+  recommendationStatusEnum,
+  seasonEnum,
+  tripTypeEnum,
+} from "./enums";
+export { users, userProfile } from "./users-schema";
+export { packingLists, gearCategories, gearCatalogItems, packingListItems } from "./packing-schema";
+export { routes } from "./routes-schema";
 export {
   usersRelations,
   userProfileRelations,
@@ -8,11 +16,3 @@ export {
   gearCatalogItemsRelations,
   packingListItemsRelations,
 } from "./relations-schema";
-export {
-  gearCategoryEnum,
-  tripTypeEnum,
-  packingLists,
-  gearCategories,
-  gearCatalogItems,
-  packingListItems,
-} from "./packing-schema";

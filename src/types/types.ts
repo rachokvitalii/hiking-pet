@@ -26,8 +26,10 @@ export const SEASONS = ["spring", "summer", "autumn", "winter"] as const;
 export type Season = typeof SEASONS[number];
 
 export type Route = {
-  id: string
+  id: number
+  slug: string
   title: string
+  description: string
   region: string
   type: TripType[]
   difficulty: ExperienceLevel
@@ -35,6 +37,6 @@ export type Route = {
   days: number
   elevationGain: number
   seasons: Season[]
-  tags: string[]
-  description: string
+  createdAt: Date
+  updatedAt: Date
 }

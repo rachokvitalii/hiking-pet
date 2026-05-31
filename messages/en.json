@@ -6,7 +6,8 @@
     "delete": "Delete",
     "edit": "Edit",
     "cancel": "Cancel",
-    "back": "Back"
+    "back": "Back",
+    "getAiRecommendation": "Get AI recommendation"
   },
   "toasts": {
     "accountCreated": "Account has been successfully created",
@@ -43,8 +44,7 @@
       "duration": "Duration",
       "elevationGain": "Elevation gain",
       "region": "Region",
-      "seasons": "Best seasons",
-      "tags": "Tags"
+      "seasons": "Best seasons"
     },
     "units": {
       "kilometers": "{value} km",
