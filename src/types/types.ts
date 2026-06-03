@@ -46,3 +46,9 @@ export type Route = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type RouteRecommendation = Omit<Route, "createdAt" | "updatedAt"> & {
+  score: number;
+  reason: string | null;
+  weatherContext: string | null;
+};

@@ -1,4 +1,4 @@
-import { asc } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -6,34 +6,77 @@ import {
   routeRecommendations,
   routes,
 } from "~/server/db/routes-schema";
+import { userProfile } from "~/server/db/schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { rankRoutesForRecommendation } from "~/server/services/route-ranking";
+import { generateRouteRecommendationsWithAI } from "~/server/services/route-recommendation-agent";
 
 export const aiRecommendationRoute = createTRPCRouter({
   getRecommendations: protectedProcedure.mutation(async ({ ctx }) => {
     const userId = Number(ctx.userId);
 
+    const [profile] = await ctx.db
+      .select()
+      .from(userProfile)
+      .where(eq(userProfile.userId, userId))
+      .limit(1);
+
+    const availableRoutes = await ctx.db.select().from(routes);
+
+    const rankedRoutes = await rankRoutesForRecommendation({
+      routes: availableRoutes,
+      profile: profile ?? null,
+      limit: 6,
+    });
+
+    const routeCandidates = rankedRoutes.map(
+      ({ route, score, reason, weatherContext }) => {
+        const { createdAt, updatedAt, ...routeData } = route;
+
+        return {
+          ...routeData,
+          score,
+          reason,
+          weatherContext,
+        };
+      },
+    );
+
+    const aiRecommendationResult = await generateRouteRecommendationsWithAI({
+      rankedRoutes: routeCandidates,
+    });
+    const rankedRouteById = new Map(
+      rankedRoutes.map((rankedRoute) => [rankedRoute.route.id, rankedRoute]),
+    );
+    const aiRecommendations = aiRecommendationResult.recommendations
+      .map((recommendation) => {
+        const rankedRoute = rankedRouteById.get(recommendation.routeId);
+
+        if (!rankedRoute) return null;
+
+        return {
+          route: rankedRoute.route,
+          reason: recommendation.reason,
+          score: rankedRoute.score,
+        };
+      })
+      .filter((recommendation) => recommendation !== null);
+
+    if (aiRecommendations.length === 0) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "No routes available for recommendations",
+      });
+    }
+
     const result = await ctx.db.transaction(async (tx) => {
-      /// some AI logic here
-      const recommendedRoutes = await tx
-        .select()
-        .from(routes)
-        .orderBy(asc(routes.id))
-        .limit(3);
-
-      if (recommendedRoutes.length === 0) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "No routes available for recommendations",
-        });
-      }
-
       const now = new Date();
       const [recommendation] = await tx
         .insert(routeRecommendations)
         .values({
           userId,
           status: "completed",
-          model: "gpt-4o-mini",
+          model: aiRecommendationResult.model,
           completedAt: now,
         })
         .returning({ id: routeRecommendations.id });
@@ -46,19 +89,19 @@ export const aiRecommendationRoute = createTRPCRouter({
       }
 
       await tx.insert(routeRecommendationItems).values(
-        recommendedRoutes.map((route, index) => ({
+        aiRecommendations.map((routeRecommendation, index) => ({
           recommendationId: recommendation.id,
-          routeId: route.id,
+          routeId: routeRecommendation.route.id,
           position: index + 1,
-          reason: `Fake recommendation for ${route.title}`,
-          score: 100 - index * 10,
+          reason: routeRecommendation.reason,
+          score: routeRecommendation.score,
           createdAt: now,
         })),
       );
 
       return {
         recommendationId: recommendation.id,
-        routes: recommendedRoutes,
+        routes: aiRecommendations.map((recommendation) => recommendation.route),
       };
     });
 
