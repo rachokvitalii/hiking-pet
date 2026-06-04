@@ -1,4 +1,5 @@
-import { eq } from "drizzle-orm";
+import { eq, desc, and, asc } from "drizzle-orm";
+import z from "zod";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -12,7 +13,7 @@ import { rankRoutesForRecommendation } from "~/server/services/route-ranking";
 import { generateRouteRecommendationsWithAI } from "~/server/services/route-recommendation-agent";
 
 export const aiRecommendationRoute = createTRPCRouter({
-  getRecommendations: protectedProcedure.mutation(async ({ ctx }) => {
+  createRecommendations: protectedProcedure.mutation(async ({ ctx }) => {
     const userId = Number(ctx.userId);
 
     const [profile] = await ctx.db
@@ -31,10 +32,8 @@ export const aiRecommendationRoute = createTRPCRouter({
 
     const routeCandidates = rankedRoutes.map(
       ({ route, score, reason, weatherContext }) => {
-        const { createdAt, updatedAt, ...routeData } = route;
-
         return {
-          ...routeData,
+          ...route,
           score,
           reason,
           weatherContext,
@@ -75,6 +74,7 @@ export const aiRecommendationRoute = createTRPCRouter({
         .insert(routeRecommendations)
         .values({
           userId,
+          title: aiRecommendationResult.title,
           status: "completed",
           model: aiRecommendationResult.model,
           completedAt: now,
@@ -110,4 +110,87 @@ export const aiRecommendationRoute = createTRPCRouter({
       data: result.routes,
     };
   }),
+  getRecommendedCollections: protectedProcedure.query(async ({ ctx }) => {
+    const userId = Number(ctx.userId);
+
+    const recommendations = await ctx.db
+      .select({
+        id: routeRecommendations.id,
+        title: routeRecommendations.title,
+        status: routeRecommendations.status,
+        createdAt: routeRecommendations.createdAt,
+        completedAt: routeRecommendations.completedAt,
+      })
+      .from(routeRecommendations)
+      .where(eq(routeRecommendations.userId, userId))
+      .orderBy(desc(routeRecommendations.createdAt));
+
+    return recommendations;
+  }),
+  getRecommendedRoutes: protectedProcedure
+    .input(z.object({ recommendationId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { recommendationId } = input;
+      const userId = Number(ctx.userId);
+
+      const [recommendation] = await ctx.db
+        .select({ id: routeRecommendations.id })
+        .from(routeRecommendations)
+        .where(
+          and(
+            eq(routeRecommendations.id, recommendationId),
+            eq(routeRecommendations.userId, userId),
+          ),
+        )
+        .limit(1);
+
+      if (!recommendation) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Recommendation not found",
+        });
+      }
+
+      const recommendedRoutes = await ctx.db
+        .select({
+          id: routes.id,
+          slug: routes.slug,
+          title: routes.title,
+          description: routes.description,
+          region: routes.region,
+          type: routes.type,
+          difficulty: routes.difficulty,
+          latitude: routes.latitude,
+          longitude: routes.longitude,
+          distanceKm: routes.distanceKm,
+          days: routes.days,
+          elevationGain: routes.elevationGain,
+          seasons: routes.seasons,
+          createdAt: routes.createdAt,
+          updatedAt: routes.updatedAt,
+          recommendationReason: routeRecommendationItems.reason,
+          recommendationScore: routeRecommendationItems.score,
+          recommendationPosition: routeRecommendationItems.position,
+        })
+        .from(routeRecommendationItems)
+        .innerJoin(routes, eq(routeRecommendationItems.routeId, routes.id))
+        .where(eq(routeRecommendationItems.recommendationId, recommendation.id))
+        .orderBy(asc(routeRecommendationItems.position));
+
+      return recommendedRoutes.map(
+        ({
+          recommendationReason,
+          recommendationScore,
+          recommendationPosition,
+          ...route
+        }) => ({
+          ...route,
+          recommendation: {
+            reason: recommendationReason,
+            score: recommendationScore,
+            position: recommendationPosition,
+          },
+        }),
+      );
+    }),
 });

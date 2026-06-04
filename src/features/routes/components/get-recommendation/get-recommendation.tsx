@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
+import { routes } from "~/shared/routes";
 import { api } from "~/trpc/react";
 
 export const GetRecommendation = () => {
@@ -11,9 +12,12 @@ export const GetRecommendation = () => {
   const router = useRouter();
 
   const { mutate: getAiRecommendation, isPending } =
-    api.ai.getRecommendations.useMutation({
+    api.ai.createRecommendations.useMutation({
       onSuccess: ({ recommendationId }) => {
-        router.push(`/routes?recommendation=${recommendationId}`);
+        router.push(`${routes.recommendedRoutes}/${recommendationId}`);
+      },
+      onError: (error) => {
+        console.error(error);
       },
     });
 

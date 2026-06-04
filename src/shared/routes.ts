@@ -4,6 +4,7 @@ const staticRoutes = {
   login: "/login",
   register: "/register",
   routes: "/routes",
+  recommendedRoutes: "/recommended-routes",
 } as const;
 
 export function packingListRoute(id: number): `/packing-lists/${number}` {

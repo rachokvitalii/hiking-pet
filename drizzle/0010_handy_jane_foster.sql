@@ -1,0 +1,1 @@
+ALTER TABLE "route_recommendations" ADD COLUMN "title" varchar(128);

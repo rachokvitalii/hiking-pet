@@ -1,25 +1,18 @@
 import type { InferSelectModel } from "drizzle-orm";
+import type { userProfile } from "~/server/db/schema";
 
-import type { ExperienceLevel, Season, TripDuration } from "~/types/types";
+import type { ExperienceLevel, TripDuration } from "~/types/types";
 import { EXPERIENCE_LEVELS, TRIP_DURATIONS } from "~/types/types";
-import type { routes, userProfile } from "~/server/db/schema";
+import type { Season, RankedRoute, Route } from "~/features/routes/types";
 import {
   getWeatherForecastForLLM,
   type WeatherForecastDay,
 } from "~/server/services/weather";
 
-type RouteRow = InferSelectModel<typeof routes>;
 type UserProfileRow = InferSelectModel<typeof userProfile>;
 
-export type RankedRoute = {
-  route: RouteRow;
-  score: number;
-  reason: string;
-  weatherContext: string | null;
-};
-
 type RankRoutesInput = {
-  routes: RouteRow[];
+  routes: Route[];
   profile: UserProfileRow | null;
   limit?: number;
   now?: Date;
@@ -68,7 +61,7 @@ export async function rankRoutesForRecommendation({
     .slice(0, limit);
 }
 
-async function fetchWeatherByRouteId(routes: RouteRow[]) {
+async function fetchWeatherByRouteId(routes: Route[]) {
   const forecasts = await Promise.allSettled(
     routes.map(async (route) => {
       const forecast = await getWeatherForecastForLLM({
@@ -94,7 +87,7 @@ function scoreRoute({
   currentSeason,
   weatherDays,
 }: {
-  route: RouteRow;
+  route: Route;
   profile: UserProfileRow | null;
   currentSeason: Season;
   weatherDays: WeatherForecastDay[] | null;

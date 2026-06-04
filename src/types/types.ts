@@ -25,30 +25,3 @@ export const EXPERIENCE_LEVEL_LABEL: Record<ExperienceLevel, string> = {
   intermediate: "Intermediate",
   advanced: "Advanced",
 };
-
-export const SEASONS = ["spring", "summer", "autumn", "winter"] as const;
-export type Season = (typeof SEASONS)[number];
-
-export type Route = {
-  id: number;
-  slug: string;
-  title: string;
-  description: string;
-  region: string;
-  type: TripType[];
-  difficulty: ExperienceLevel;
-  latitude: number;
-  longitude: number;
-  distanceKm: number;
-  days: number;
-  elevationGain: number;
-  seasons: Season[];
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type RouteRecommendation = Omit<Route, "createdAt" | "updatedAt"> & {
-  score: number;
-  reason: string | null;
-  weatherContext: string | null;
-};

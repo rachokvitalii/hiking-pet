@@ -7,14 +7,14 @@ import {
   ROUTE_RECOMMENDATION_SYSTEM_PROMPT,
   ROUTE_RECOMMENDATION_USER_TASK,
 } from "./route-recommendation-prompts";
-import type { RouteRecommendation } from "~/types/types";
+import type { RouteRecommendation } from "~/features/routes/types";
 
 const RecommendationSchema = z.object({
+  title: z.string(),
   recommendations: z.array(
     z.object({
       routeId: z.number().int(),
       reason: z.string(),
-      title: z.string(),
     }),
   ),
 });
@@ -29,6 +29,7 @@ export async function generateRouteRecommendationsWithAI({
 }: {
   rankedRoutes: RouteRecommendation[];
 }): Promise<{
+  title: string;
   recommendations: GeneratedRouteRecommendation[];
   model: string;
 }> {
@@ -37,7 +38,7 @@ export async function generateRouteRecommendationsWithAI({
 
   if (!apiKey || rankedRoutes.length === 0) {
     return {
-      recommendations: fallbackRecommendations,
+      ...fallbackRecommendations,
       model: "rule-based-weather-v1",
     };
   }
@@ -54,21 +55,13 @@ export async function generateRouteRecommendationsWithAI({
           role: "user",
           content: JSON.stringify({
             task: ROUTE_RECOMMENDATION_USER_TASK,
-            candidates: rankedRoutes.map((route) => ({
-              id: route.id,
-              title: route.title,
-              description: route.description,
-              region: route.region,
-              type: route.type,
-              difficulty: route.difficulty,
-              distanceKm: route.distanceKm,
-              days: route.days,
-              elevationGain: route.elevationGain,
-              seasons: route.seasons,
-              ruleScore: route.score,
-              ruleReason: route.reason,
-              weatherContext: route.weatherContext,
-            })),
+            candidates: rankedRoutes.map((route) => {
+              const { createdAt, updatedAt, ...routeData } = route;
+
+              return {
+                ...routeData,
+              };
+            }),
           }),
         },
       ],
@@ -78,30 +71,72 @@ export async function generateRouteRecommendationsWithAI({
     });
 
     const aiRecommendations = response.output_parsed?.recommendations ?? [];
+    const aiTitle = response.output_parsed?.title.trim();
 
     return {
+      title: aiTitle
+        ? truncateRecommendationTitle(aiTitle)
+        : fallbackRecommendations.title,
       recommendations: mergeRecommendations({
         aiRecommendations,
-        fallbackRecommendations,
+        fallbackRecommendations: fallbackRecommendations.recommendations,
         rankedRoutes,
       }),
       model,
     };
   } catch {
     return {
-      recommendations: fallbackRecommendations,
+      ...fallbackRecommendations,
       model: "rule-based-weather-v1",
     };
   }
 }
 
-function createFallbackRecommendations(
-  rankedRoutes: RouteRecommendation[],
-): GeneratedRouteRecommendation[] {
-  return rankedRoutes.slice(0, 3).map((route) => ({
-    routeId: route.id,
-    reason: route.reason ?? "Маршрут добре відповідає базовим критеріям.",
-  }));
+function createFallbackRecommendations(rankedRoutes: RouteRecommendation[]): {
+  title: string;
+  recommendations: GeneratedRouteRecommendation[];
+} {
+  const recommendedRoutes = rankedRoutes.slice(0, 3);
+
+  return {
+    title: createFallbackRecommendationTitle(recommendedRoutes),
+    recommendations: recommendedRoutes.map((route) => ({
+      routeId: route.id,
+      reason: route.reason ?? "Маршрут добре відповідає базовим критеріям.",
+    })),
+  };
+}
+
+function createFallbackRecommendationTitle(routes: RouteRecommendation[]) {
+  const formattedDate = new Intl.DateTimeFormat("uk-UA", {
+    day: "numeric",
+    month: "long",
+  }).format(new Date());
+  const firstRouteTitle = routes[0]?.title;
+
+  if (!firstRouteTitle) {
+    return `Добірка від ${formattedDate}`;
+  }
+
+  const remainingRoutesCount = routes.length - 1;
+  const routesSummary =
+    remainingRoutesCount > 0
+      ? `${firstRouteTitle} та ще ${remainingRoutesCount} ${getRouteCountLabel(remainingRoutesCount)}`
+      : firstRouteTitle;
+
+  return truncateRecommendationTitle(`${formattedDate}: ${routesSummary}`);
+}
+
+function getRouteCountLabel(count: number) {
+  return count === 1 ? "маршрут" : "маршрути";
+}
+
+function truncateRecommendationTitle(title: string) {
+  const maxTitleLength = 128;
+
+  if (title.length <= maxTitleLength) return title;
+
+  return `${title.slice(0, maxTitleLength - 1).trim()}…`;
 }
 
 function mergeRecommendations({

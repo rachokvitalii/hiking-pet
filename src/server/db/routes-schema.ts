@@ -40,6 +40,7 @@ export const routeRecommendations = pgTable(
     userId: integer("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 128 }),
     status: recommendationStatusEnum("status").notNull().default("pending"),
     model: varchar("model", { length: 128 }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
