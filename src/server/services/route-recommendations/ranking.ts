@@ -7,7 +7,7 @@ import type { Season, RankedRoute, Route } from "~/features/routes/types";
 import {
   getWeatherForecastForLLM,
   type WeatherForecastDay,
-} from "~/server/services/weather";
+} from "~/server/services/weather/open-meteo";
 
 type UserProfileRow = InferSelectModel<typeof userProfile>;
 

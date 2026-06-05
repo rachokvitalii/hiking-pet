@@ -2,11 +2,11 @@ import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
-import { env } from "../../env";
+import { env } from "~/env";
 import {
   ROUTE_RECOMMENDATION_SYSTEM_PROMPT,
   ROUTE_RECOMMENDATION_USER_TASK,
-} from "./route-recommendation-prompts";
+} from "./prompts";
 import type { RouteRecommendation } from "~/features/routes/types";
 
 const RecommendationSchema = z.object({

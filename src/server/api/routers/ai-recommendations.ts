@@ -9,8 +9,8 @@ import {
 } from "~/server/db/routes-schema";
 import { userProfile } from "~/server/db/schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { rankRoutesForRecommendation } from "~/server/services/route-ranking";
-import { generateRouteRecommendationsWithAI } from "~/server/services/route-recommendation-agent";
+import { rankRoutesForRecommendation } from "~/server/services/route-recommendations/ranking";
+import { generateRouteRecommendationsWithAI } from "~/server/services/route-recommendations/agent";
 
 export const aiRecommendationRoute = createTRPCRouter({
   createRecommendations: protectedProcedure.mutation(async ({ ctx }) => {
