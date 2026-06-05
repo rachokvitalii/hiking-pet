@@ -20,20 +20,13 @@ import { appRoutes } from "~/shared/app-routes";
 import { ButtonBack } from "~/components/button-back";
 import { api } from "~/trpc/server";
 import type { TripType } from "~/types/types";
-import { getRecommendationId } from "~/features/routes/utils/get-recommendation-id";
 
 export default async function RoutePage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ recommendation?: string }>;
 }) {
   const { id } = await params;
-  const recommendationId = await getRecommendationId(searchParams);
-  const backHref = recommendationId
-    ? appRoutes.routesWithRecommendation(recommendationId)
-    : appRoutes.routes;
 
   const route = await api.routes.getById({ id: Number(id) });
 
@@ -68,7 +61,7 @@ export default async function RoutePage({
 
   return (
     <div className="space-y-4">
-      <ButtonBack href={backHref} />
+      <ButtonBack href={appRoutes.routes} />
 
       <Card>
         <CardHeader className="gap-4">
