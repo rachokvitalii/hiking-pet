@@ -1,5 +1,5 @@
 import { auth } from "~/server/auth";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { redirect } from "next/navigation";
 
 export default async function LoggedOutLayout({
@@ -10,7 +10,7 @@ export default async function LoggedOutLayout({
   const session = await auth();
 
   if (!!session?.user?.id) {
-    redirect(routes.profile);
+    redirect(appRoutes.profile);
   }
 
   return children;

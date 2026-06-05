@@ -29,7 +29,7 @@ import { TRIP_TYPES } from "~/types/types";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { useRouter } from "next/navigation";
 
 export const CreateList = () => {
@@ -55,7 +55,7 @@ export const CreateList = () => {
       setOpen(false);
       form.reset();
       if (data?.id) {
-        router.push(routes.packingList(data.id));
+        router.push(appRoutes.packingList(data.id));
       }
     },
     onError: () => {

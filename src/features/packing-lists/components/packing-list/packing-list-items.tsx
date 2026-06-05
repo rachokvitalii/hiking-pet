@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import type { RouterOutputs } from "~/trpc/react";
 import { DeleteList } from "../delete-list";
 import { Button } from "~/components/ui/button";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import Link from "next/link";
 
 type PackingListItemsProps = {
@@ -54,7 +54,7 @@ export const PackingListItems = ({ items }: PackingListItemsProps) => {
                 variant="outline"
                 className="cursor-pointer"
               >
-                <Link href={routes.packingList(item.id)} prefetch>
+                <Link href={appRoutes.packingList(item.id)} prefetch>
                   {t("edit")}
                 </Link>
               </Button>

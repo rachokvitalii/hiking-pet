@@ -16,7 +16,7 @@ import { registerAction } from "./actions";
 import { type RegisterFormInput, formSchema } from "./validation";
 import { formErrorsSetter } from "~/lib/form-errors";
 import Link from "next/link";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
@@ -109,7 +109,7 @@ const RegisterPage = () => {
       </form>
       <div className="mt-5 text-center text-xs">
         Already have an account?{` `}
-        <Link className="underline" href={routes.login}>
+        <Link className="underline" href={appRoutes.login}>
           Login
         </Link>
       </div>

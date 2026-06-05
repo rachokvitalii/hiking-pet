@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "~/server/auth";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { HydrateClient } from "~/trpc/server";
 
 export default async function Home() {
@@ -10,10 +10,10 @@ export default async function Home() {
 
   // it is temporary
   if (!session) {
-    redirect(routes.login);
+    redirect(appRoutes.login);
   }
 
-  redirect(routes.profile);
+  redirect(appRoutes.profile);
 
   return (
     <HydrateClient>

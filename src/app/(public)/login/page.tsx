@@ -16,7 +16,7 @@ import { Button } from "~/components/ui/button";
 import { loginAction } from "./actions";
 import { formErrorsSetter } from "~/lib/form-errors";
 import { useRouter } from "next/navigation";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import Link from "next/link";
 
 const LoginPage = () => {
@@ -38,7 +38,7 @@ const LoginPage = () => {
     if (!res?.ok) {
       formErrorsSetter(res.issues, form.setError);
     } else {
-      router.replace(routes.profile);
+      router.replace(appRoutes.profile);
     }
   };
 
@@ -91,7 +91,7 @@ const LoginPage = () => {
       </form>
       <div className="mt-5 text-center text-xs">
         Don&apos;t have an account?{` `}
-        <Link className="underline" href={routes.register}>
+        <Link className="underline" href={appRoutes.register}>
           Register
         </Link>
       </div>

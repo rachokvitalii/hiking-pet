@@ -1,7 +1,7 @@
 import React from "react";
 import { auth } from "~/server/auth";
 import { Header } from "~/components/header";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { redirect } from "next/navigation";
 import { Container } from "~/components/container";
 
@@ -13,7 +13,7 @@ export default async function LoggedInLayout({
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect(routes.login);
+    redirect(appRoutes.login);
   }
 
   return (

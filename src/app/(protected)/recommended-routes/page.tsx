@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { routes as staticRoutes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { api } from "~/trpc/server";
 
 const dateFormatter = new Intl.DateTimeFormat("uk-UA", {
@@ -26,7 +26,8 @@ const statusLabel = {
 } as const;
 
 export default async function RecommendedRoutesPage() {
-  const recommendations = await api.ai.getRecommendedCollections();
+  const recommendations =
+    await api.aiRecommendations.getRecommendedCollections();
 
   if (recommendations.length === 0) {
     return (
@@ -50,7 +51,7 @@ export default async function RecommendedRoutesPage() {
           </CardHeader>
           <CardFooter className="justify-center">
             <Button asChild>
-              <Link href={staticRoutes.routes}>До маршрутів</Link>
+              <Link href={appRoutes.routes}>До маршрутів</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -108,7 +109,7 @@ export default async function RecommendedRoutesPage() {
                 </div>
                 <Button asChild variant="outline">
                   <Link
-                    href={`${staticRoutes.recommendedRoutes}/${recommendation.id}`}
+                    href={appRoutes.recommendedRouteDetails(recommendation.id)}
                   >
                     Відкрити
                   </Link>

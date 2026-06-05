@@ -7,7 +7,7 @@ import { api } from "~/trpc/server";
 import { TRIP_DURATIONS, type TripDuration } from "~/types/types";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { PackingList } from "~/features/packing-lists/components/packing-list";
 import { CreateList } from "~/features/packing-lists/components/create-list";
 
@@ -47,7 +47,7 @@ const Profile: FC = async () => {
         <CardContent className="text-muted-foreground text-sm">
           {tProfile.rich("noProfileData", {
             settingsLink: (chunks) => (
-              <Link href={routes.settings} className="text-blue-500">
+              <Link href={appRoutes.settings} className="text-blue-500">
                 {chunks}
               </Link>
             ),

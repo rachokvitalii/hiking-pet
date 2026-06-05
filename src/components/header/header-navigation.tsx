@@ -8,15 +8,15 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "~/components/ui/navigation-menu";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 
 const navigationItems = [
   {
-    href: routes.routes,
+    href: appRoutes.routes,
     label: "Routes",
   },
   {
-    href: routes.recommendedRoutes,
+    href: appRoutes.recommendedRoutes,
     label: "Recommended Routes",
   },
 ];

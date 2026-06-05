@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { routes as staticRoutes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { ButtonBack } from "~/components/button-back";
 import { api } from "~/trpc/server";
 import type { TripType } from "~/types/types";
@@ -32,8 +32,8 @@ export default async function RoutePage({
   const { id } = await params;
   const recommendationId = await getRecommendationId(searchParams);
   const backHref = recommendationId
-    ? `${staticRoutes.routes}?recommendation=${recommendationId}`
-    : staticRoutes.routes;
+    ? appRoutes.routesWithRecommendation(recommendationId)
+    : appRoutes.routes;
 
   const route = await api.routes.getById({ id: Number(id) });
 

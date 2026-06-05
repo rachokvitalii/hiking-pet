@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent } from "~/components/ui/card";
 import { FieldSet } from "~/components/ui/field";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { type TripType } from "~/types/types";
 import { CatalogItemsSection } from "./catalog-items-section";
 import { EditableListTitle } from "./editable-list-title";
@@ -23,7 +23,7 @@ export const EditListPage = ({ list }: EditListPageProps) => {
 
   return (
     <>
-      <ButtonBack href={routes.profile} />
+      <ButtonBack href={appRoutes.profile} />
 
       <Card className="relative">
         <Badge

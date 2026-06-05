@@ -1,13 +1,19 @@
 import Link from "next/link";
 import { RouteIcon } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { routes as staticRoutes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import type { Route } from "~/features/routes/types";
 import { getTranslations } from "next-intl/server";
 
-type RouteCard = Route & { recommendation?: { reason: string | null; } | null };
+type RouteCard = Route & { recommendation?: { reason: string | null } | null };
 
 export const RouteCard = async ({ route }: { route: RouteCard }) => {
   const tActions = await getTranslations("actions");
@@ -42,15 +48,11 @@ export const RouteCard = async ({ route }: { route: RouteCard }) => {
       </CardContent>
       <CardFooter className="flex justify-end">
         <Button asChild>
-          <Link
-            href={
-              `${staticRoutes.routes}/${route.id}`
-            }
-          >
+          <Link href={appRoutes.routeDetails(route.id)}>
             {tActions("view")}
           </Link>
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 };

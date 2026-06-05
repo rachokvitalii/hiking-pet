@@ -7,7 +7,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { User } from "lucide-react";
 import { SignOut } from "~/components/sign-out";
-import { routes } from "~/shared/routes";
+import { appRoutes } from "~/shared/app-routes";
 import { MenuItem } from "./menu-item";
 
 export const Menu = () => {
@@ -21,8 +21,8 @@ export const Menu = () => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          <MenuItem href={routes.profile}>Profile</MenuItem>
-          <MenuItem href={routes.settings}>Settings</MenuItem>
+          <MenuItem href={appRoutes.profile}>Profile</MenuItem>
+          <MenuItem href={appRoutes.settings}>Settings</MenuItem>
 
           <DropdownMenuSeparator />
 
