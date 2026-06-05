@@ -1,5 +1,5 @@
-import OpenAI from "openai";
-import { zodTextFormat } from "openai/helpers/zod";
+import { openai } from "@ai-sdk/openai";
+import { generateText, Output } from "ai";
 import { z } from "zod";
 
 import { env } from "~/env";
@@ -44,34 +44,37 @@ export async function generateRouteRecommendationsWithAI({
   }
 
   try {
-    const client = new OpenAI({ apiKey });
     const model = env.OPENAI_RECOMMENDATION_MODEL;
 
-    const response = await client.responses.parse({
-      model,
-      instructions: ROUTE_RECOMMENDATION_SYSTEM_PROMPT,
-      input: [
-        {
-          role: "user",
-          content: JSON.stringify({
-            task: ROUTE_RECOMMENDATION_USER_TASK,
-            candidates: rankedRoutes.map((route) => {
-              const { createdAt, updatedAt, ...routeData } = route;
+    const { output } = await generateText({
+      model: openai(model),
+      system: ROUTE_RECOMMENDATION_SYSTEM_PROMPT,
+      prompt: JSON.stringify({
+        task: ROUTE_RECOMMENDATION_USER_TASK,
+        candidates: rankedRoutes.map((route) => {
+          const {
+            createdAt: _createdAt,
+            updatedAt: _updatedAt,
+            ...routeData
+          } = route;
+          void _createdAt;
+          void _updatedAt;
 
-              return {
-                ...routeData,
-              };
-            }),
-          }),
+          return routeData;
+        }),
+      }),
+      output: Output.object({
+        schema: RecommendationSchema,
+      }),
+      providerOptions: {
+        openai: {
+          store: false,
         },
-      ],
-      text: {
-        format: zodTextFormat(RecommendationSchema, "route_recommendations"),
       },
     });
 
-    const aiRecommendations = response.output_parsed?.recommendations ?? [];
-    const aiTitle = response.output_parsed?.title.trim();
+    const aiRecommendations = output.recommendations;
+    const aiTitle = output.title.trim();
 
     return {
       title: aiTitle
