@@ -1,19 +1,27 @@
-import { generateText, Output } from "ai";
+import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { z } from "zod";
+import { SYSTEM_PROMPT } from "./prompts";
+import { buildAssistantContext } from "./context";
 
-const AssistantResponseSchema = z.object({
-  message: z.string(),
-});
+export const generateAssistantResponse = async ({
+  messages,
+  userId,
+}: {
+  messages: UIMessage[];
+  userId: number;
+}) => {
+  const assistantContext = await buildAssistantContext({ userId });
 
-export const generateAssistantResponse = async ({ message }: { message: string }) => {
-  const { output } = await generateText({
+  const result = streamText({
     model: openai("gpt-4o"),
-    prompt: message,
-    output: Output.object({
-      schema: AssistantResponseSchema,
-    }),
+    system: [SYSTEM_PROMPT, assistantContext].join("\n\n"),
+    messages: await convertToModelMessages(messages),
+    providerOptions: {
+      openai: {
+        store: false,
+      },
+    },
   });
 
-  return output.message;
+  return result.toUIMessageStreamResponse();
 };

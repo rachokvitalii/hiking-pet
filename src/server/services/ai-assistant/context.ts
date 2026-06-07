@@ -1,0 +1,114 @@
+import "server-only";
+
+import { asc, eq } from "drizzle-orm";
+
+import { db } from "~/server/db";
+import { routes, userProfile } from "~/server/db/schema";
+
+type AssistantRouteContext = {
+  id: number;
+  title: string;
+  url: string;
+  description: string;
+  region: string;
+  type: string[];
+  difficulty: string;
+  distanceKm: number;
+  days: number;
+  elevationGain: number;
+  seasons: string[];
+};
+
+type AssistantUserProfileContext = {
+  displayName: string | null;
+  homeRegion: string | null;
+  experienceLevel: string | null;
+  preferredTripDuration: string | null;
+  maxDailyKm: number | null;
+};
+
+export async function buildAssistantContext({ userId }: { userId: number }) {
+  const [profileRows, routeContexts] = await Promise.all([
+    db
+      .select({
+        displayName: userProfile.displayName,
+        homeRegion: userProfile.homeRegion,
+        experienceLevel: userProfile.experienceLevel,
+        preferredTripDuration: userProfile.preferredTripDuration,
+        maxDailyKm: userProfile.maxDailyKm,
+      })
+      .from(userProfile)
+      .where(eq(userProfile.userId, userId))
+      .limit(1),
+    getAssistantRouteContexts(),
+  ]);
+
+  const profile = profileRows[0] ?? null;
+
+  return formatAssistantContext({
+    profile: profile
+      ? {
+          displayName: profile.displayName,
+          homeRegion: profile.homeRegion,
+          experienceLevel: profile.experienceLevel,
+          preferredTripDuration: profile.preferredTripDuration,
+          maxDailyKm: profile.maxDailyKm,
+        }
+      : null,
+    routes: routeContexts,
+  });
+}
+
+async function getAssistantRouteContexts(): Promise<AssistantRouteContext[]> {
+  "use cache";
+
+  const routeRows = await db
+    .select({
+      id: routes.id,
+      title: routes.title,
+      description: routes.description,
+      region: routes.region,
+      type: routes.type,
+      difficulty: routes.difficulty,
+      distanceKm: routes.distanceKm,
+      days: routes.days,
+      elevationGain: routes.elevationGain,
+      seasons: routes.seasons,
+    })
+    .from(routes)
+    .orderBy(asc(routes.id));
+
+  return routeRows.map((route) => ({
+    id: route.id,
+    title: route.title,
+    url: `/routes/${route.id}`,
+    description: route.description,
+    region: route.region,
+    type: route.type,
+    difficulty: route.difficulty,
+    distanceKm: route.distanceKm,
+    days: route.days,
+    elevationGain: route.elevationGain,
+    seasons: route.seasons,
+  }));
+}
+
+function formatAssistantContext({
+  profile,
+  routes,
+}: {
+  profile: AssistantUserProfileContext | null;
+  routes: AssistantRouteContext[];
+}) {
+  return [
+    "Current application data:",
+    JSON.stringify(
+      {
+        userProfile: profile,
+        routes,
+      },
+      null,
+      2,
+    ),
+  ].join("\n");
+}

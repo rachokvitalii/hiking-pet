@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/sonner";
 import { defaultLocale } from "~/i18n/request";
+import { TooltipProvider } from "~/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "Hiking",
@@ -26,7 +27,9 @@ export default function RootLayout({
     <html lang={defaultLocale} className={`${geist.variable} dark`}>
       <body>
         <NextIntlClientProvider>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TooltipProvider>
+            <TRPCReactProvider>{children}</TRPCReactProvider>
+          </TooltipProvider>
         </NextIntlClientProvider>
         <Toaster
           toastOptions={{

@@ -1,4 +1,5 @@
-import type { ExperienceLevel, Season, TripType } from "~/types/types";
+import type { ExperienceLevel, TripType } from "~/types/types";
+import type { Season } from "~/features/routes/types";
 
 type RouteSeed = {
   slug: string;

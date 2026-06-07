@@ -15,7 +15,7 @@ export const appRouter = createTRPCRouter({
   packingLists: packingListsRouter,
   gearCatalog: gearCatalogRouter,
   routes: routesRouter,
-  ai: aiRecommendationRoute,
+  aiRecommendations: aiRecommendationRoute,
 });
 
 // export type definition of API

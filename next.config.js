@@ -6,7 +6,11 @@ import "./src/env.js";
 import createNextIntlPlugin from "next-intl/plugin";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  experimental: {
+    useCache: true,
+  },
+};
 
 const withNextIntl = createNextIntlPlugin();
 
