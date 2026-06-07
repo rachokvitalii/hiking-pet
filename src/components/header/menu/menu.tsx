@@ -5,7 +5,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { User } from "lucide-react";
+import { Settings } from "lucide-react";
 import { SignOut } from "~/components/sign-out";
 import { appRoutes } from "~/shared/app-routes";
 import { MenuItem } from "./menu-item";
@@ -16,12 +16,11 @@ export const Menu = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="cursor-pointer rounded-sm border-2 p-1">
-            <User />
+            <Settings />
           </div>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          <MenuItem href={appRoutes.profile}>Profile</MenuItem>
           <MenuItem href={appRoutes.settings}>Settings</MenuItem>
 
           <DropdownMenuSeparator />

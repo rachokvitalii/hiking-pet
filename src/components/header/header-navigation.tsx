@@ -12,12 +12,20 @@ import { appRoutes } from "~/shared/app-routes";
 
 const navigationItems = [
   {
+    href: appRoutes.profile,
+    label: "Profile",
+  },
+  {
     href: appRoutes.routes,
     label: "Routes",
   },
   {
     href: appRoutes.recommendedRoutes,
     label: "Recommended Routes",
+  },
+  {
+    href: appRoutes.assistant,
+    label: "Assistant",
   },
 ];
 

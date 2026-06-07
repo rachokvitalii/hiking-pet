@@ -5,16 +5,11 @@ const staticAppRoutes = {
   register: "/register",
   routes: "/routes",
   recommendedRoutes: "/recommended-routes",
+  assistant: "/assistant",
 } as const;
 
 function routeDetailsRoute(id: number | string): `/routes/${number | string}` {
   return `/routes/${id}`;
-}
-
-function routesWithRecommendationRoute(
-  recommendationId: number | string,
-): `/routes?recommendation=${number | string}` {
-  return `/routes?recommendation=${recommendationId}`;
 }
 
 function recommendedRouteDetailsRoute(
@@ -32,7 +27,6 @@ function packingListRoute(
 export const appRoutes = {
   ...staticAppRoutes,
   routeDetails: routeDetailsRoute,
-  routesWithRecommendation: routesWithRecommendationRoute,
   recommendedRouteDetails: recommendedRouteDetailsRoute,
   packingList: packingListRoute,
 };
