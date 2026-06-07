@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const { messages } = await request.json() as { messages: UIMessage[] };
+  const { messages } = (await request.json()) as { messages: UIMessage[] };
 
   const response = await generateAssistantResponse({ messages, userId });
 
