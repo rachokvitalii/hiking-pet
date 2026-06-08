@@ -21,7 +21,6 @@ type AssistantRouteContext = {
 };
 
 type AssistantUserProfileContext = {
-  displayName: string | null;
   homeRegion: string | null;
   experienceLevel: string | null;
   preferredTripDuration: string | null;
@@ -32,7 +31,6 @@ export async function buildAssistantContext({ userId }: { userId: number }) {
   const [profileRows, routeContexts] = await Promise.all([
     db
       .select({
-        displayName: userProfile.displayName,
         homeRegion: userProfile.homeRegion,
         experienceLevel: userProfile.experienceLevel,
         preferredTripDuration: userProfile.preferredTripDuration,
@@ -47,22 +45,14 @@ export async function buildAssistantContext({ userId }: { userId: number }) {
   const profile = profileRows[0] ?? null;
 
   return formatAssistantContext({
-    profile: profile
-      ? {
-          displayName: profile.displayName,
-          homeRegion: profile.homeRegion,
-          experienceLevel: profile.experienceLevel,
-          preferredTripDuration: profile.preferredTripDuration,
-          maxDailyKm: profile.maxDailyKm,
-        }
-      : null,
+    userProfile: profile,
     routes: routeContexts,
   });
 }
 
 async function getAssistantRouteContexts(): Promise<AssistantRouteContext[]> {
   "use cache";
-  cacheLife('max')
+  cacheLife("max");
 
   const routeRows = await db
     .select({
@@ -95,22 +85,12 @@ async function getAssistantRouteContexts(): Promise<AssistantRouteContext[]> {
   }));
 }
 
-function formatAssistantContext({
-  profile,
-  routes,
-}: {
-  profile: AssistantUserProfileContext | null;
+function formatAssistantContext(context: {
+  userProfile: AssistantUserProfileContext | null;
   routes: AssistantRouteContext[];
 }) {
   return [
     "Current application data:",
-    JSON.stringify(
-      {
-        userProfile: profile,
-        routes,
-      },
-      null,
-      2,
-    ),
+    JSON.stringify(context, null, 2),
   ].join("\n");
 }
