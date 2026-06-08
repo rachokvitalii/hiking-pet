@@ -4,6 +4,7 @@ import { asc, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { routes, userProfile } from "~/server/db/schema";
+import { cacheLife } from "next/cache";
 
 type AssistantRouteContext = {
   id: number;
@@ -61,6 +62,7 @@ export async function buildAssistantContext({ userId }: { userId: number }) {
 
 async function getAssistantRouteContexts(): Promise<AssistantRouteContext[]> {
   "use cache";
+  cacheLife('max')
 
   const routeRows = await db
     .select({

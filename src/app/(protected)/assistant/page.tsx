@@ -11,7 +11,12 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { Loader2Icon, MountainSnowIcon, SparklesIcon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  Loader2Icon,
+  MountainSnowIcon,
+  SparklesIcon,
+} from "lucide-react";
 import { cn } from "~/lib/utils";
 import {
   Conversation,
@@ -45,8 +50,31 @@ function getMessageText(message: UIMessage) {
     .trim();
 }
 
+function getChatErrorMessage(error: Error | undefined) {
+  if (!error) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(error.message) as unknown;
+
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      "error" in parsed &&
+      typeof parsed.error === "string"
+    ) {
+      return parsed.error;
+    }
+  } catch {
+    // Transport errors are not always JSON responses.
+  }
+
+  return error.message || "Could not send the message.";
+}
+
 export default function AssistantPage() {
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error, clearError } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
     }),
@@ -54,6 +82,7 @@ export default function AssistantPage() {
 
   const [input, setInput] = useState("");
   const isPending = status !== "ready";
+  const errorMessage = getChatErrorMessage(error);
 
   const submitMessage = (text: string) => {
     const nextMessage = text.trim();
@@ -62,6 +91,7 @@ export default function AssistantPage() {
       return;
     }
 
+    clearError();
     void sendMessage({ text: nextMessage });
     setInput("");
   };
@@ -198,6 +228,15 @@ export default function AssistantPage() {
                   disabled={isPending}
                 />
               </PromptInputBody>
+              {errorMessage && (
+                <div
+                  role="alert"
+                  className="text-destructive flex items-start gap-2 px-3 pb-2 text-sm"
+                >
+                  <AlertCircleIcon className="mt-0.5 size-4 shrink-0" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
               <PromptInputFooter className="justify-end">
                 <PromptInputSubmit
                   status={status}
