@@ -28,21 +28,18 @@ type AssistantUserProfileContext = {
 };
 
 export async function buildAssistantContext({ userId }: { userId: number }) {
-  const [profileRows, routeContexts] = await Promise.all([
-    db
-      .select({
-        homeRegion: userProfile.homeRegion,
-        experienceLevel: userProfile.experienceLevel,
-        preferredTripDuration: userProfile.preferredTripDuration,
-        maxDailyKm: userProfile.maxDailyKm,
-      })
-      .from(userProfile)
-      .where(eq(userProfile.userId, userId))
-      .limit(1),
-    getAssistantRouteContexts(),
-  ]);
+  const [profile = null] = await db
+    .select({
+      homeRegion: userProfile.homeRegion,
+      experienceLevel: userProfile.experienceLevel,
+      preferredTripDuration: userProfile.preferredTripDuration,
+      maxDailyKm: userProfile.maxDailyKm,
+    })
+    .from(userProfile)
+    .where(eq(userProfile.userId, userId))
+    .limit(1);
 
-  const profile = profileRows[0] ?? null;
+  const routeContexts = await getAssistantRouteContexts();
 
   return formatAssistantContext({
     userProfile: profile,
