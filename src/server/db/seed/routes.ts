@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 
-import { routes as routeSeeds } from "~/data/route";
+import { routes as routeSeeds } from "~/server/db/seed/data/route";
 import { routes } from "~/server/db/schema";
 
 const nodeEnv = process.env.NODE_ENV ?? "development";
