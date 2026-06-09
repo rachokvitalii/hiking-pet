@@ -14,6 +14,7 @@ export const env = createEnv({
     AUTH_URL: z.string().url().optional(),
     DATABASE_URL: z.string().url(),
     OPENAI_API_KEY: z.string().optional(),
+    OPENAI_EMBEDDING_MODEL: z.string().default("text-embedding-3-small"),
     OPENAI_RECOMMENDATION_MODEL: z.string().default("gpt-5-mini"),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -38,6 +39,7 @@ export const env = createEnv({
     AUTH_URL: process.env.AUTH_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    OPENAI_EMBEDDING_MODEL: process.env.OPENAI_EMBEDDING_MODEL,
     OPENAI_RECOMMENDATION_MODEL: process.env.OPENAI_RECOMMENDATION_MODEL,
     NODE_ENV: process.env.NODE_ENV,
   },
