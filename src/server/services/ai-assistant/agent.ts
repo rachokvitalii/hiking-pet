@@ -22,7 +22,7 @@ export const streamAssistantResponse = async ({
   userId: number;
 }) => {
   const assistantContext = await buildAssistantContext({
-    routeSearchQuery: getRouteSearchQuery(messages),
+    searchQuery: getRouteSearchQuery(messages),
     userId,
   });
 

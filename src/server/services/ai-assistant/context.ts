@@ -8,6 +8,10 @@ import {
   retrieveAssistantRouteContexts,
   type AssistantRouteRetrievalContext,
 } from "./route-retrieval";
+import {
+  retrieveAssistantKnowledgeContexts,
+  type AssistantKnowledgeRetrievalContext,
+} from "./knowledge-retrieval";
 
 type AssistantUserProfileContext = {
   homeRegion: string | null;
@@ -17,10 +21,10 @@ type AssistantUserProfileContext = {
 };
 
 export async function buildAssistantContext({
-  routeSearchQuery,
+  searchQuery,
   userId,
 }: {
-  routeSearchQuery: string;
+  searchQuery: string;
   userId: number;
 }) {
   const [profile = null] = await db
@@ -35,16 +39,21 @@ export async function buildAssistantContext({
     .limit(1);
 
   const routeRetrieval = await retrieveAssistantRouteContexts({
-    query: routeSearchQuery,
+    query: searchQuery,
+  });
+  const knowledgeRetrieval = await retrieveAssistantKnowledgeContexts({
+    query: searchQuery,
   });
 
   return formatAssistantContext({
+    knowledgeRetrieval,
     routeRetrieval,
     userProfile: profile,
   });
 }
 
 function formatAssistantContext(context: {
+  knowledgeRetrieval: AssistantKnowledgeRetrievalContext;
   routeRetrieval: AssistantRouteRetrievalContext;
   userProfile: AssistantUserProfileContext | null;
 }) {
