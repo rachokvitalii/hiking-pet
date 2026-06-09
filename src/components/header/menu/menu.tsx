@@ -1,3 +1,7 @@
+"use client";
+
+import { Settings } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Settings } from "lucide-react";
 import { SignOut } from "~/components/sign-out";
 import { appRoutes } from "~/shared/app-routes";
 import { MenuItem } from "./menu-item";
@@ -14,14 +17,11 @@ export const Menu = () => {
   return (
     <div className="flex items-center gap-4">
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button
-            type="button"
-            aria-label="Open settings menu"
-            className="cursor-pointer rounded-sm border-2 p-1"
-          >
-            <Settings />
-          </button>
+        <DropdownMenuTrigger
+          aria-label="Open settings menu"
+          className="cursor-pointer rounded-sm border-2 p-1"
+        >
+          <Settings />
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
