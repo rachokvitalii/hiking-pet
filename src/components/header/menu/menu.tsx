@@ -15,9 +15,13 @@ export const Menu = () => {
     <div className="flex items-center gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="cursor-pointer rounded-sm border-2 p-1">
+          <button
+            type="button"
+            aria-label="Open settings menu"
+            className="cursor-pointer rounded-sm border-2 p-1"
+          >
             <Settings />
-          </div>
+          </button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
