@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   pgTable,
   serial,
@@ -8,6 +9,7 @@ import {
   index,
   uniqueIndex,
   integer,
+  vector,
 } from "drizzle-orm/pg-core";
 import { users } from "./users-schema";
 import { tripTypeEnum } from "./enums";
@@ -15,23 +17,35 @@ import { experienceLevelEnum } from "./enums";
 import { seasonEnum } from "./enums";
 import { recommendationStatusEnum } from "./enums";
 
-export const routes = pgTable("routes", {
-  id: serial("id").primaryKey(),
-  slug: varchar("slug", { length: 128 }).notNull().unique(),
-  title: varchar("title", { length: 128 }).notNull(),
-  description: text("description").notNull(),
-  region: varchar("region", { length: 128 }).notNull(),
-  type: tripTypeEnum("type").array().notNull(),
-  difficulty: experienceLevelEnum("difficulty").notNull(),
-  latitude: doublePrecision("latitude").notNull(),
-  longitude: doublePrecision("longitude").notNull(),
-  distanceKm: integer("distance_km").notNull(),
-  days: integer("days").notNull(),
-  elevationGain: integer("elevation_gain").notNull(),
-  seasons: seasonEnum("seasons").array().notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+export const routes = pgTable(
+  "routes",
+  {
+    id: serial("id").primaryKey(),
+    slug: varchar("slug", { length: 128 }).notNull().unique(),
+    title: varchar("title", { length: 128 }).notNull(),
+    description: text("description").notNull(),
+    region: varchar("region", { length: 128 }).notNull(),
+    type: tripTypeEnum("type").array().notNull(),
+    difficulty: experienceLevelEnum("difficulty").notNull(),
+    latitude: doublePrecision("latitude").notNull(),
+    longitude: doublePrecision("longitude").notNull(),
+    distanceKm: integer("distance_km").notNull(),
+    days: integer("days").notNull(),
+    elevationGain: integer("elevation_gain").notNull(),
+    seasons: seasonEnum("seasons").array().notNull(),
+    embedding: vector("embedding", { dimensions: 1536 }),
+    embeddingModel: varchar("embedding_model", { length: 128 }),
+    embeddingSourceHash: varchar("embedding_source_hash", { length: 64 }),
+    embeddingUpdatedAt: timestamp("embedding_updated_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("routes_embedding_hnsw_idx")
+      .using("hnsw", table.embedding.op("vector_cosine_ops"))
+      .where(sql`${table.embedding} is not null`),
+  ],
+);
 
 export const routeRecommendations = pgTable(
   "route_recommendations",

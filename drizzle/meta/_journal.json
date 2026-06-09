@@ -78,6 +78,20 @@
       "when": 1780562184056,
       "tag": "0010_handy_jane_foster",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1780948273707,
+      "tag": "0011_thankful_malice",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1780948346023,
+      "tag": "0012_lively_shooting_star",
+      "breakpoints": true
     }
   ]
 }

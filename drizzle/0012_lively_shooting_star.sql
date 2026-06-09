@@ -1,0 +1,1 @@
+CREATE INDEX "routes_embedding_hnsw_idx" ON "routes" USING hnsw ("embedding" vector_cosine_ops) WHERE "routes"."embedding" is not null;

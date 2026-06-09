@@ -21,9 +21,10 @@ export const streamAssistantResponse = async ({
   messages: UIMessage[];
   userId: number;
 }) => {
-  // come up with another way to build the context
-  // because in a future there will be more routes and it will consume a lot of tokens
-  const assistantContext = await buildAssistantContext({ userId });
+  const assistantContext = await buildAssistantContext({
+    routeSearchQuery: getRouteSearchQuery(messages),
+    userId,
+  });
 
   const result = streamText({
     model: openai(model),
@@ -40,3 +41,19 @@ export const streamAssistantResponse = async ({
 
   return result.toUIMessageStreamResponse();
 };
+
+function getRouteSearchQuery(messages: UIMessage[]) {
+  return messages
+    .slice(-6)
+    .map((message) => {
+      const text = message.parts
+        .filter((part) => part.type === "text")
+        .map((part) => part.text.trim())
+        .filter(Boolean)
+        .join("\n");
+
+      return text ? `${message.role}: ${text}` : null;
+    })
+    .filter((text): text is string => text !== null)
+    .join("\n\n");
+}
