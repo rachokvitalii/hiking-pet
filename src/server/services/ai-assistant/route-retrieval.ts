@@ -8,7 +8,7 @@ import { cosineDistance } from "drizzle-orm/sql/functions/vector";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { routes } from "~/server/db/schema";
-import { ROUTE_EMBEDDING_DIMENSIONS } from "./route-documents";
+import { ROUTE_EMBEDDING_DIMENSIONS } from "~/server/services/routes/embedding-documents";
 
 export const ROUTE_RETRIEVAL_LIMIT = 5;
 const ROUTE_FALLBACK_LIMIT = 8;

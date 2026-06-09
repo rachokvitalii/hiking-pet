@@ -9,7 +9,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:embed:routes": "tsx src/server/db/embed-routes.ts",
+    "db:embed:routes": "tsx src/server/services/routes/embed-routes.ts",
     "db:seed:routes": "tsx src/server/db/seed/routes.ts",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",

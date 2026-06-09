@@ -8,7 +8,7 @@ import {
   ROUTE_EMBEDDING_DIMENSIONS,
   buildRouteEmbeddingDocument,
   getRouteEmbeddingSourceHash,
-} from "~/server/services/ai-assistant/route-documents";
+} from "~/server/services/routes/embedding-documents";
 
 const nodeEnv = process.env.NODE_ENV ?? "development";
 const envFiles = [
