@@ -12,14 +12,16 @@ pnpm format:write  # Format with Prettier
 ./start-database.sh   # Start local Postgres via Docker/Podman
 pnpm db:push          # Push schema changes to DB (dev, no migration file)
 pnpm db:generate      # Generate Drizzle migration files
-pnpm db:migrate       # Run migrations
+pnpm db:migrate       # Run migrations (dev DATABASE_URL)
+pnpm db:migrate:prod  # Run migrations (PROD_DATABASE_URL)
 pnpm db:studio        # Open Drizzle Studio GUI
 ```
 
 ## Environment
 
-Required `.env` variables (validated at startup via `src/env.js`):
-- `DATABASE_URL` — PostgreSQL connection URL
+Required `.env` variables (validated at startup via `src/env.ts` / `src/env.js`):
+- `DATABASE_URL` — PostgreSQL connection URL (used by the app and dev DB commands)
+- `PROD_DATABASE_URL` — optional locally; required for `pnpm db:migrate:prod`
 - `AUTH_SECRET` — required in production, optional in development
 
 ## Architecture
