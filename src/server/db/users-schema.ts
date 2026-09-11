@@ -6,11 +6,13 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { userRoleEnum } from "./enums";
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   email: text("email").unique(),
   password: text("password"),
+  role: userRoleEnum("role").notNull().default("user"),
   createAt: timestamp("created_at").defaultNow(),
   twoFactorSecret: text("2fa_secret"),
   twoFactorDeactivated: boolean("2fa_activated").default(false),

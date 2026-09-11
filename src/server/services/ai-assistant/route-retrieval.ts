@@ -90,7 +90,7 @@ export async function retrieveAssistantRouteContexts({
       return createFallbackRouteRetrievalContext({
         query: normalizedQuery,
         reason:
-          "No route embeddings are available yet. Run pnpm db:embed:routes after migrations.",
+          "No route embeddings are available yet. Create or re-embed routes in the admin panel.",
       });
     }
 

@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
 
+import { htmlToPlainText } from "~/lib/html-to-plain-text";
+
 export const ROUTE_EMBEDDING_DIMENSIONS = 1536;
 
 export type RouteEmbeddingDocumentInput = {
@@ -19,7 +21,7 @@ export function buildRouteEmbeddingDocument(
 ) {
   return [
     `Назва: ${route.title}`,
-    `Опис: ${route.description}`,
+    `Опис: ${htmlToPlainText(route.description)}`,
     `Регіон: ${route.region}`,
     `Тип: ${route.type.join(", ")}`,
     `Складність: ${route.difficulty}`,

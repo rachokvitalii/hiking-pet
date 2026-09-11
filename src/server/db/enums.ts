@@ -1,5 +1,7 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
+export const userRoleEnum = pgEnum("user_role", ["user", "admin"]);
+
 export const tripTypeEnum = pgEnum("trip_type", [
   "hiking",
   "camping",

@@ -92,6 +92,13 @@
       "when": 1780948346023,
       "tag": "0012_lively_shooting_star",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1788955130328,
+      "tag": "0013_strong_juggernaut",
+      "breakpoints": true
     }
   ]
 }

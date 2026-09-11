@@ -8,18 +8,13 @@ import {
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Badge } from "~/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { appRoutes } from "~/shared/app-routes";
 import { ButtonBack } from "~/components/button-back";
 import { api } from "~/trpc/server";
 import type { TripType } from "~/types/types";
+import { RouteDescription } from "~/features/routes/components/route-description";
 
 export default async function RoutePage({
   params,
@@ -80,9 +75,10 @@ export default async function RoutePage({
             <CardTitle className="text-2xl leading-tight">
               {route.title}
             </CardTitle>
-            <CardDescription className="text-base">
-              {route.description}
-            </CardDescription>
+            <RouteDescription
+              html={route.description}
+              className="text-muted-foreground text-base"
+            />
           </div>
         </CardHeader>
 

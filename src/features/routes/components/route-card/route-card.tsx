@@ -11,6 +11,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { appRoutes } from "~/shared/app-routes";
 import type { Route } from "~/features/routes/types";
+import { RouteDescription } from "~/features/routes/components/route-description";
 import { getTranslations } from "next-intl/server";
 
 type RouteCard = Route & { recommendation?: { reason: string | null } | null };
@@ -25,7 +26,7 @@ export const RouteCard = async ({ route }: { route: RouteCard }) => {
         <CardTitle>{route.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-sm">{route.description}</p>
+        <RouteDescription html={route.description} clamp />
         <div className="text-muted-foreground flex items-center gap-2 text-sm">
           <RouteIcon className="h-4 w-4" />
           {tRoute("units.kilometers", { value: route.distanceKm })}

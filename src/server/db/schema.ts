@@ -4,6 +4,7 @@ export {
   recommendationStatusEnum,
   seasonEnum,
   tripTypeEnum,
+  userRoleEnum,
 } from "./enums";
 export { users, userProfile } from "./users-schema";
 export {

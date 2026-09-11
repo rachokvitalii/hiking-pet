@@ -6,6 +6,8 @@ import { compare } from "bcrypt";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 
+type UserRole = "user" | "admin";
+
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -16,8 +18,17 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role: UserRole;
     } & DefaultSession["user"];
   }
+
+  interface User {
+    role: UserRole;
+  }
+}
+
+function normalizeUserRole(role: unknown): UserRole {
+  return role === "admin" ? "admin" : "user";
 }
 
 /**
@@ -30,12 +41,14 @@ export const authConfig = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
+        token.role = normalizeUserRole(user.role);
       }
 
       return token;
     },
     session: ({ session, token }) => {
       session.user.id = token.id as string;
+      session.user.role = normalizeUserRole(token.role);
 
       return session;
     },
@@ -69,6 +82,7 @@ export const authConfig = {
           return {
             id: user.id.toString(),
             email: user.email,
+            role: user.role,
           };
         } catch {
           throw new Error("Auth failed");

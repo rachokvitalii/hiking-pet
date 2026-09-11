@@ -5,3 +5,13 @@ export const getCurrentUser = async () => {
 
   return session?.user ?? null;
 };
+
+export const requireAdmin = async () => {
+  const user = await getCurrentUser();
+
+  if (!user?.id || user.role !== "admin") {
+    throw new Error("Admin access required");
+  }
+
+  return user;
+};

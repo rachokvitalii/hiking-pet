@@ -27,15 +27,30 @@ const navigationItems = [
     href: appRoutes.assistant,
     label: "Assistant",
   },
-];
+] as const;
 
-export const HeaderNavigation = () => {
+type HeaderNavigationProps = {
+  isAdmin?: boolean;
+};
+
+export const HeaderNavigation = ({
+  isAdmin = false,
+}: HeaderNavigationProps) => {
   const pathname = usePathname();
+  const items = isAdmin
+    ? [
+        ...navigationItems,
+        {
+          href: appRoutes.adminRoutes,
+          label: "Admin",
+        },
+      ]
+    : navigationItems;
 
   return (
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
-        {navigationItems.map(({ href, label }) => {
+        {items.map(({ href, label }) => {
           const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
           return (
