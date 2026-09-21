@@ -1,4 +1,7 @@
-import { sanitizeRouteDescriptionHtml } from "~/lib/sanitize-route-html";
+import {
+  sanitizeRouteDescriptionHtml,
+  stripRouteDescriptionImages,
+} from "~/lib/sanitize-route-html";
 import { htmlToPlainText } from "~/lib/html-to-plain-text";
 import { cn } from "~/lib/utils";
 
@@ -14,13 +17,17 @@ export function RouteDescription({
   clamp = false,
 }: RouteDescriptionProps) {
   const sanitized = sanitizeRouteDescriptionHtml(html);
-  const plainText = htmlToPlainText(sanitized);
+  const htmlToRender = clamp
+    ? stripRouteDescriptionImages(sanitized)
+    : sanitized;
+  const plainText = htmlToPlainText(htmlToRender);
+  const hasImage = !clamp && /<img\b/i.test(htmlToRender);
 
-  if (!plainText) {
+  if (!plainText && !hasImage) {
     return null;
   }
 
-  if (!/[<>]/.test(sanitized)) {
+  if (!/[<>]/.test(htmlToRender)) {
     return <p className={cn("text-sm", className)}>{plainText}</p>;
   }
 
@@ -34,10 +41,12 @@ export function RouteDescription({
         "[&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5",
         "[&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5",
         "[&_p]:mb-2 last:[&_p]:mb-0",
+        !clamp &&
+          "[&_img]:my-3 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-md",
         clamp && "line-clamp-3 overflow-hidden",
         className,
       )}
-      dangerouslySetInnerHTML={{ __html: sanitized }}
+      dangerouslySetInnerHTML={{ __html: htmlToRender }}
     />
   );
 }

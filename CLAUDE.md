@@ -20,9 +20,12 @@ pnpm db:studio        # Open Drizzle Studio GUI
 ## Environment
 
 Required `.env` variables (validated at startup via `src/env.ts` / `src/env.js`):
+
 - `DATABASE_URL` — PostgreSQL connection URL (used by the app and dev DB commands)
 - `PROD_DATABASE_URL` — optional locally; required for `pnpm db:migrate:prod`
 - `AUTH_SECRET` — required in production, optional in development
+- `IMAGE_STORE_ID` — Vercel Blob store id (optional locally; useful when wiring OIDC or identifying the store)
+- `IMAGE_READ_WRITE_TOKEN` — Vercel Blob read-write token; required in production, optional in development (needed for route description image uploads)
 
 ## Architecture
 
@@ -45,6 +48,7 @@ This is a **T3 Stack** app: Next.js 15 App Router + tRPC + Drizzle ORM + NextAut
 ### Database (Drizzle + PostgreSQL)
 
 Schema is split into files under `src/server/db/` and re-exported from `schema.ts`:
+
 - `users-schema.ts` — NextAuth users table.
 - `user-profile-schema.ts` — extended user profile.
 - `packing-schema.ts` — core domain: `packingList`, `packingCategory`, `packingCatalogItem`, `packingListItem`.

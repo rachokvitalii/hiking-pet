@@ -18,6 +18,11 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().optional(),
     OPENAI_EMBEDDING_MODEL: z.string().default("text-embedding-3-small"),
     OPENAI_RECOMMENDATION_MODEL: z.string().default("gpt-5-mini"),
+    IMAGE_STORE_ID: z.string().optional(),
+    IMAGE_READ_WRITE_TOKEN:
+      process.env.NODE_ENV === "production"
+        ? z.string()
+        : z.string().optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -45,6 +50,8 @@ export const env = createEnv({
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_EMBEDDING_MODEL: process.env.OPENAI_EMBEDDING_MODEL,
     OPENAI_RECOMMENDATION_MODEL: process.env.OPENAI_RECOMMENDATION_MODEL,
+    IMAGE_STORE_ID: process.env.IMAGE_STORE_ID,
+    IMAGE_READ_WRITE_TOKEN: process.env.IMAGE_READ_WRITE_TOKEN,
     NODE_ENV: process.env.NODE_ENV,
   },
   /**

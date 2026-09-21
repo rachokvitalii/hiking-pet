@@ -7,7 +7,12 @@ import { appRoutes } from "~/shared/app-routes";
 import { requireAdmin } from "~/server/auth/utils";
 import { db } from "~/server/db";
 import { routes } from "~/server/db/schema";
-import { sanitizeRouteDescriptionHtml } from "~/lib/sanitize-route-html";
+import {
+  extractDescriptionBlobImageUrls,
+  sanitizeRouteDescriptionHtml,
+  vanishedDescriptionBlobImageUrls,
+} from "~/lib/sanitize-route-html";
+import { deleteDescriptionImageBlobs } from "~/server/services/routes/description-blobs";
 import { embedRouteById } from "~/server/services/routes/embed-route";
 import type { Issues } from "~/types/types";
 import {
@@ -116,13 +121,33 @@ export async function updateRouteAction(
   }
 
   const { id, ...routeData } = parsed.data;
+  const sanitizedDescription = sanitizeRouteDescriptionHtml(
+    routeData.description,
+  );
+
+  let previousDescription = "";
 
   try {
+    const [existingRoute] = await db
+      .select({ description: routes.description })
+      .from(routes)
+      .where(eq(routes.id, id))
+      .limit(1);
+
+    if (!existingRoute) {
+      return {
+        ok: false,
+        issues: [{ path: [], message: "Route was not found." }],
+      };
+    }
+
+    previousDescription = existingRoute.description;
+
     const [updatedRoute] = await db
       .update(routes)
       .set({
         ...routeData,
-        description: sanitizeRouteDescriptionHtml(routeData.description),
+        description: sanitizedDescription,
         updatedAt: new Date(),
       })
       .where(eq(routes.id, id))
@@ -137,6 +162,10 @@ export async function updateRouteAction(
   } catch (error) {
     return { ok: false, issues: mapRoutePersistenceError(error) };
   }
+
+  await deleteDescriptionImageBlobs(
+    vanishedDescriptionBlobImageUrls(previousDescription, sanitizedDescription),
+  );
 
   try {
     await embedRouteById(id);
@@ -159,16 +188,28 @@ export async function deleteRouteAction(
     return { ok: false, issues: parsed.error.issues };
   }
 
+  const [existingRoute] = await db
+    .select({ description: routes.description })
+    .from(routes)
+    .where(eq(routes.id, parsed.data.id))
+    .limit(1);
+
+  const descriptionUrls = extractDescriptionBlobImageUrls(
+    existingRoute?.description ?? "",
+  );
+
   try {
     await db.delete(routes).where(eq(routes.id, parsed.data.id));
-    revalidateRoutePaths(parsed.data.id);
-    return { ok: true };
   } catch {
     return {
       ok: false,
       issues: [{ path: [], message: "Route could not be deleted." }],
     };
   }
+
+  await deleteDescriptionImageBlobs(descriptionUrls);
+  revalidateRoutePaths(parsed.data.id);
+  return { ok: true };
 }
 
 export async function reEmbedRouteAction(
