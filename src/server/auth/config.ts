@@ -37,6 +37,7 @@ function normalizeUserRole(role: unknown): UserRole {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  trustHost: true,
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
